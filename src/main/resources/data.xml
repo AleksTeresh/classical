@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="1-data" author="Aleksandr Tereshchenko">
+        <insert
+                schemaName="public"
+                tableName="venue">
+            <column name="id" value="1" />
+            <column name="name" value="Musiikkitalo" />
+            <column name="description" value="The only place with decent kind of music in the whole Finland" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="venue">
+            <column name="id" value="2" />
+            <column name="name" value="Mariinsky" />
+            <column name="description" value="Concert hall of the Mariinsky theater located in St. Petersburg" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="venue">
+            <column name="id" value="3" />
+            <column name="name" value="Spb Philarmony" />
+            <column name="description" value="St. Petersburg philarmony by Dmitri Shostakovich" />
+        </insert>
+
+        <insert
+                schemaName="public"
+                tableName="gig">
+            <column name="id" value="1" />
+            <column name="venue_id" value="1" />
+            <column name="name" value="Rachmaninoff best works" />
+            <column name="description" value="Piano Concert No. 2 and Rhapsody on the theme of Paganini" />
+            <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
+            <column name="duration" value="7200" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="gig">
+            <column name="id" value="2" />
+            <column name="venue_id" value="1" />
+            <column name="name" value="Rachmaninoff 2nd best works" />
+            <column name="description" value="Piano Concert No. 3 and 4" />
+            <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
+            <column name="duration" value="7200" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="gig">
+            <column name="id" value="3" />
+            <column name="venue_id" value="2" />
+            <column name="name" value="Some actual name here" />
+            <column name="description" value="Some proper description here" />
+            <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
+            <column name="duration" value="7200" />
+        </insert>
+
+        <insert
+                schemaName="public"
+                tableName="author">
+            <column name="id" value="1" />
+            <column name="name" value="Sergei Rachmaninoff" />
+            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Sergei_Rachmaninoff" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="author">
+            <column name="id" value="2" />
+            <column name="name" value="Pyotr Ilyich Tchaikovsky" />
+            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky" />
+        </insert>
+
+        <insert
+                schemaName="public"
+                tableName="performance">
+            <column name="id" value="1" />
+            <column name="author_id" value="1" />
+            <column name="gig_id" value="1" />
+            <column name="name" value="2nd Concetro for piano and orchestra" />
+            <column name="description" value="Some sensible description follows here" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance">
+            <column name="id" value="2" />
+            <column name="author_id" value="1" />
+            <column name="gig_id" value="1" />
+            <column name="name" value="Rhapsody on the theme of Paganini" />
+            <column name="description" value="Some sensible description follows her" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance">
+            <column name="id" value="3" />
+            <column name="author_id" value="1" />
+            <column name="gig_id" value="2" />
+            <column name="name" value="3rd Concerto for piano and orchestra" />
+            <column name="description" value="Some sensible description follows here" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance">
+            <column name="id" value="4" />
+            <column name="author_id" value="1" />
+            <column name="gig_id" value="2" />
+            <column name="name" value="4th Concerto for piano and orchestra" />
+            <column name="description" value="Some sensible description follows here" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance">
+            <column name="id" value="5" />
+            <column name="author_id" value="2" />
+            <column name="gig_id" value="3" />
+            <column name="name" value="1st Concetro for piano and orchestra" />
+            <column name="description" value="Some sensible description follows here" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

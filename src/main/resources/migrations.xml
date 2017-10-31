@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="1" author="Aleksandr Tereshchenko">
+        <createTable tableName="venue">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(700)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <createTable tableName="gig">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="venue_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(700)">
+                <constraints nullable="true" />
+            </column>
+            <column name="timestamp" type="datetime" >
+                <constraints nullable="true" />
+            </column>
+            <column name="duration" type="integer" >
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <createTable tableName="author">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="wikipedia_link" type="varchar(300)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <createTable tableName="performance">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="author_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="gig_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(700)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <!-- Foreign key constraints -->
+        <addForeignKeyConstraint baseTableName="gig"
+                                 baseColumnNames="venue_id"
+                                 constraintName="fk_gig_venue"
+                                 referencedTableName="venue"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="performance"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_performance_author"
+                                 referencedTableName="author"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="performance"
+                                 baseColumnNames="gig_id"
+                                 constraintName="fk_performance_gig"
+                                 referencedTableName="gig"
+                                 referencedColumnNames="id" />
+
+    </changeSet>
+</databaseChangeLog>
