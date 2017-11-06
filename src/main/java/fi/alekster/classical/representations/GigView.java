@@ -27,6 +27,9 @@ public class GigView {
     @JsonProperty
     private List<PerformanceView> performances;
 
+    @JsonProperty
+    private VenueView venue;
+
 
     public GigView () {}
 
@@ -36,7 +39,8 @@ public class GigView {
             String description,
             Long timestamp,
             int duration,
-            List<PerformanceView> performances
+            List<PerformanceView> performances,
+            VenueView venue
     ) {
         this.id = id;
         this.name = name;
@@ -44,16 +48,18 @@ public class GigView {
         this.timestamp = timestamp;
         this.duration = duration;
         this.performances = performances;
+        this.venue = venue;
     }
 
-    public static GigView fromEntity(Gig gig, List<PerformanceView> performances) {
+    public static GigView fromEntity(Gig gig, List<PerformanceView> performances, VenueView venue) {
         return new GigView(
                 gig.getId(),
                 gig.getName(),
                 gig.getDescription(),
                 gig.getTimestamp().getTime() / 1000,
                 gig.getDuration(),
-                performances
+                performances,
+                venue
         );
     }
 }

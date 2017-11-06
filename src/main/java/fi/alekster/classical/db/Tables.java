@@ -10,6 +10,7 @@ import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
+import fi.alekster.classical.db.tables.PerformanceGenre;
 import fi.alekster.classical.db.tables.Venue;
 
 import javax.annotation.Generated;
@@ -57,6 +58,11 @@ public class Tables {
      * The table <code>public.performance</code>.
      */
     public static final Performance PERFORMANCE = fi.alekster.classical.db.tables.Performance.PERFORMANCE;
+
+    /**
+     * The table <code>public.performance_genre</code>.
+     */
+    public static final PerformanceGenre PERFORMANCE_GENRE = fi.alekster.classical.db.tables.PerformanceGenre.PERFORMANCE_GENRE;
 
     /**
      * The table <code>public.venue</code>.

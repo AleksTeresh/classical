@@ -9,11 +9,13 @@ import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
+import fi.alekster.classical.db.tables.PerformanceGenre;
 import fi.alekster.classical.db.tables.Venue;
 import fi.alekster.classical.db.tables.records.AuthorRecord;
 import fi.alekster.classical.db.tables.records.DatabasechangeloglockRecord;
 import fi.alekster.classical.db.tables.records.GenreRecord;
 import fi.alekster.classical.db.tables.records.GigRecord;
+import fi.alekster.classical.db.tables.records.PerformanceGenreRecord;
 import fi.alekster.classical.db.tables.records.PerformanceRecord;
 import fi.alekster.classical.db.tables.records.VenueRecord;
 
@@ -58,6 +60,7 @@ public class Keys {
     public static final UniqueKey<GenreRecord> PK_GENRE = UniqueKeys0.PK_GENRE;
     public static final UniqueKey<GigRecord> PK_GIG = UniqueKeys0.PK_GIG;
     public static final UniqueKey<PerformanceRecord> PK_PERFORMANCE = UniqueKeys0.PK_PERFORMANCE;
+    public static final UniqueKey<PerformanceGenreRecord> PK_PERFORMANCE_GENRE = UniqueKeys0.PK_PERFORMANCE_GENRE;
     public static final UniqueKey<VenueRecord> PK_VENUE = UniqueKeys0.PK_VENUE;
 
     // -------------------------------------------------------------------------
@@ -67,7 +70,8 @@ public class Keys {
     public static final ForeignKey<GigRecord, VenueRecord> GIG__FK_GIG_VENUE = ForeignKeys0.GIG__FK_GIG_VENUE;
     public static final ForeignKey<PerformanceRecord, AuthorRecord> PERFORMANCE__FK_PERFORMANCE_AUTHOR = ForeignKeys0.PERFORMANCE__FK_PERFORMANCE_AUTHOR;
     public static final ForeignKey<PerformanceRecord, GigRecord> PERFORMANCE__FK_PERFORMANCE_GIG = ForeignKeys0.PERFORMANCE__FK_PERFORMANCE_GIG;
-    public static final ForeignKey<PerformanceRecord, GenreRecord> PERFORMANCE__FK_PERFORMANCE_GENRE = ForeignKeys0.PERFORMANCE__FK_PERFORMANCE_GENRE;
+    public static final ForeignKey<PerformanceGenreRecord, PerformanceRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_PERFORMANCE = ForeignKeys0.PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_PERFORMANCE;
+    public static final ForeignKey<PerformanceGenreRecord, GenreRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_GENRE = ForeignKeys0.PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_GENRE;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -87,6 +91,7 @@ public class Keys {
         public static final UniqueKey<GenreRecord> PK_GENRE = createUniqueKey(Genre.GENRE, "pk_genre", Genre.GENRE.ID);
         public static final UniqueKey<GigRecord> PK_GIG = createUniqueKey(Gig.GIG, "pk_gig", Gig.GIG.ID);
         public static final UniqueKey<PerformanceRecord> PK_PERFORMANCE = createUniqueKey(Performance.PERFORMANCE, "pk_performance", Performance.PERFORMANCE.ID);
+        public static final UniqueKey<PerformanceGenreRecord> PK_PERFORMANCE_GENRE = createUniqueKey(PerformanceGenre.PERFORMANCE_GENRE, "pk_performance_genre", PerformanceGenre.PERFORMANCE_GENRE.PERFORMANCE_ID, PerformanceGenre.PERFORMANCE_GENRE.GENRE_ID);
         public static final UniqueKey<VenueRecord> PK_VENUE = createUniqueKey(Venue.VENUE, "pk_venue", Venue.VENUE.ID);
     }
 
@@ -94,6 +99,7 @@ public class Keys {
         public static final ForeignKey<GigRecord, VenueRecord> GIG__FK_GIG_VENUE = createForeignKey(fi.alekster.classical.db.Keys.PK_VENUE, Gig.GIG, "gig__fk_gig_venue", Gig.GIG.VENUE_ID);
         public static final ForeignKey<PerformanceRecord, AuthorRecord> PERFORMANCE__FK_PERFORMANCE_AUTHOR = createForeignKey(fi.alekster.classical.db.Keys.PK_AUTHOR, Performance.PERFORMANCE, "performance__fk_performance_author", Performance.PERFORMANCE.AUTHOR_ID);
         public static final ForeignKey<PerformanceRecord, GigRecord> PERFORMANCE__FK_PERFORMANCE_GIG = createForeignKey(fi.alekster.classical.db.Keys.PK_GIG, Performance.PERFORMANCE, "performance__fk_performance_gig", Performance.PERFORMANCE.GIG_ID);
-        public static final ForeignKey<PerformanceRecord, GenreRecord> PERFORMANCE__FK_PERFORMANCE_GENRE = createForeignKey(fi.alekster.classical.db.Keys.PK_GENRE, Performance.PERFORMANCE, "performance__fk_performance_genre", Performance.PERFORMANCE.GENRE_ID);
+        public static final ForeignKey<PerformanceGenreRecord, PerformanceRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_PERFORMANCE = createForeignKey(fi.alekster.classical.db.Keys.PK_PERFORMANCE, PerformanceGenre.PERFORMANCE_GENRE, "performance_genre__fk_performance_genre_performance", PerformanceGenre.PERFORMANCE_GENRE.PERFORMANCE_ID);
+        public static final ForeignKey<PerformanceGenreRecord, GenreRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_GENRE = createForeignKey(fi.alekster.classical.db.Keys.PK_GENRE, PerformanceGenre.PERFORMANCE_GENRE, "performance_genre__fk_performance_genre_genre", PerformanceGenre.PERFORMANCE_GENRE.GENRE_ID);
     }
 }

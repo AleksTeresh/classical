@@ -10,6 +10,7 @@ import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
+import fi.alekster.classical.db.tables.PerformanceGenre;
 import fi.alekster.classical.db.tables.Venue;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 725043713;
+    private static final long serialVersionUID = 1655143549;
 
     /**
      * The reference instance of <code>public</code>
@@ -73,6 +74,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.performance</code>.
      */
     public final Performance PERFORMANCE = fi.alekster.classical.db.tables.Performance.PERFORMANCE;
+
+    /**
+     * The table <code>public.performance_genre</code>.
+     */
+    public final PerformanceGenre PERFORMANCE_GENRE = fi.alekster.classical.db.tables.PerformanceGenre.PERFORMANCE_GENRE;
 
     /**
      * The table <code>public.venue</code>.
@@ -126,6 +132,7 @@ public class Public extends SchemaImpl {
             Genre.GENRE,
             Gig.GIG,
             Performance.PERFORMANCE,
+            PerformanceGenre.PERFORMANCE_GENRE,
             Venue.VENUE);
     }
 }

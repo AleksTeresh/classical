@@ -149,7 +149,6 @@
             <column name="id" value="1" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="1" />
-            <column name="genre_id" value="1" />
             <column name="youtube_id" value="yJpJ8REjvqo" />
             <column name="name" value="2nd Concetro for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
@@ -160,7 +159,6 @@
             <column name="id" value="2" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="1" />
-            <column name="genre_id" value="1" />
             <column name="youtube_id" value="2lha9QArvqw" />
             <column name="name" value="Rhapsody on the theme of Paganini" />
             <column name="description" value="Some sensible description follows her" />
@@ -171,7 +169,6 @@
             <column name="id" value="3" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="2" />
-            <column name="genre_id" value="1" />
             <column name="youtube_id" value="MOOfoW5_2iE" />
             <column name="name" value="3rd Concerto for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
@@ -182,7 +179,6 @@
             <column name="id" value="4" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="2" />
-            <column name="genre_id" value="1" />
             <column name="youtube_id" value="jmdkTsjFI-s" />
             <column name="name" value="4th Concerto for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
@@ -193,10 +189,40 @@
             <column name="id" value="5" />
             <column name="author_id" value="2" />
             <column name="gig_id" value="3" />
-            <column name="genre_id" value="1" />
             <column name="youtube_id" value="Yue6Cb5OULM" />
             <column name="name" value="1st Concetro for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
+        </insert>
+
+        <insert
+                schemaName="public"
+                tableName="performance_genre">
+            <column name="performance_id" value="1" />
+            <column name="genre_id" value="1" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance_genre">
+            <column name="performance_id" value="2" />
+            <column name="genre_id" value="1" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance_genre">
+            <column name="performance_id" value="3" />
+            <column name="genre_id" value="1" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance_genre">
+            <column name="performance_id" value="4" />
+            <column name="genre_id" value="1" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="performance_genre">
+            <column name="performance_id" value="5" />
+            <column name="genre_id" value="1" />
         </insert>
     </changeSet>
 </databaseChangeLog>

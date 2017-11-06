@@ -1,7 +1,7 @@
 package fi.alekster.classical.controllers;
 
-import fi.alekster.classical.dao.ExVenueDao;
-import fi.alekster.classical.representations.VenueView;
+import fi.alekster.classical.dao.ExGenreDao;
+import fi.alekster.classical.representations.GenreView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,27 +15,27 @@ import java.util.stream.Collectors;
  * Created by aleksandr on 6.11.2017.
  */
 @RestController
-@RequestMapping("/venue")
-public class VenueController {
-    private final ExVenueDao venueDao;
+@RequestMapping("/genre")
+public class GenreController {
+    private final ExGenreDao genreDao;
 
     @Autowired
-    public VenueController(
-            ExVenueDao venueDao
+    public GenreController(
+            ExGenreDao genreDao
     ) {
-        this.venueDao = venueDao;
+        this.genreDao = genreDao;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<VenueView> getGenres() {
-        return venueDao.findAll()
+    public List<GenreView> getGenres() {
+        return genreDao.findAll()
                 .stream()
-                .map(VenueView::fromEntity)
+                .map(GenreView::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public VenueView getGenre(@PathVariable("id") Long id) {
-        return VenueView.fromEntity(venueDao.fetchOneById(id));
+    public GenreView getGenre(@PathVariable("id") Long id) {
+        return GenreView.fromEntity(genreDao.fetchOneById(id));
     }
 }

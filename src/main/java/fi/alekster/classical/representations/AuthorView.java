@@ -14,6 +14,9 @@ public class AuthorView {
     private String name;
 
     @JsonProperty
+    private String description;
+
+    @JsonProperty
     private String wikipediaLink;
 
     public AuthorView () {}
@@ -21,10 +24,12 @@ public class AuthorView {
     public AuthorView(
             Long id,
             String name,
+            String description,
             String wikipediaLink
     ) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.wikipediaLink = wikipediaLink;
     }
 
@@ -32,6 +37,7 @@ public class AuthorView {
         return new AuthorView(
                 author.getId(),
                 author.getName(),
+                author.getDescription(),
                 author.getWikipediaLink()
         );
     }

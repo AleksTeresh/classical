@@ -22,7 +22,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Performance implements Serializable {
 
-    private static final long serialVersionUID = 1616394952;
+    private static final long serialVersionUID = 396730802;
 
     private Long   id;
     private Long   authorId;
@@ -32,7 +32,6 @@ public class Performance implements Serializable {
     private String conductor;
     private String players;
     private String youtubeId;
-    private Long   genreId;
 
     public Performance() {}
 
@@ -45,7 +44,6 @@ public class Performance implements Serializable {
         this.conductor = value.conductor;
         this.players = value.players;
         this.youtubeId = value.youtubeId;
-        this.genreId = value.genreId;
     }
 
     public Performance(
@@ -56,8 +54,7 @@ public class Performance implements Serializable {
         String description,
         String conductor,
         String players,
-        String youtubeId,
-        Long   genreId
+        String youtubeId
     ) {
         this.id = id;
         this.authorId = authorId;
@@ -67,7 +64,6 @@ public class Performance implements Serializable {
         this.conductor = conductor;
         this.players = players;
         this.youtubeId = youtubeId;
-        this.genreId = genreId;
     }
 
     public Long getId() {
@@ -134,14 +130,6 @@ public class Performance implements Serializable {
         this.youtubeId = youtubeId;
     }
 
-    public Long getGenreId() {
-        return this.genreId;
-    }
-
-    public void setGenreId(Long genreId) {
-        this.genreId = genreId;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Performance (");
@@ -154,7 +142,6 @@ public class Performance implements Serializable {
         sb.append(", ").append(conductor);
         sb.append(", ").append(players);
         sb.append(", ").append(youtubeId);
-        sb.append(", ").append(genreId);
 
         sb.append(")");
         return sb.toString();
