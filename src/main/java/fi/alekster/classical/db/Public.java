@@ -7,6 +7,7 @@ package fi.alekster.classical.db;
 import fi.alekster.classical.db.tables.Author;
 import fi.alekster.classical.db.tables.Databasechangelog;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
+import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.Venue;
@@ -36,7 +37,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 263184578;
+    private static final long serialVersionUID = 725043713;
 
     /**
      * The reference instance of <code>public</code>
@@ -57,6 +58,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.databasechangeloglock</code>.
      */
     public final Databasechangeloglock DATABASECHANGELOGLOCK = fi.alekster.classical.db.tables.Databasechangeloglock.DATABASECHANGELOGLOCK;
+
+    /**
+     * The table <code>public.genre</code>.
+     */
+    public final Genre GENRE = fi.alekster.classical.db.tables.Genre.GENRE;
 
     /**
      * The table <code>public.gig</code>.
@@ -99,6 +105,7 @@ public class Public extends SchemaImpl {
     private final List<Sequence<?>> getSequences0() {
         return Arrays.<Sequence<?>>asList(
             Sequences.AUTHOR_ID_SEQ,
+            Sequences.GENRE_ID_SEQ,
             Sequences.GIG_ID_SEQ,
             Sequences.PERFORMANCE_ID_SEQ,
             Sequences.VENUE_ID_SEQ);
@@ -116,6 +123,7 @@ public class Public extends SchemaImpl {
             Author.AUTHOR,
             Databasechangelog.DATABASECHANGELOG,
             Databasechangeloglock.DATABASECHANGELOGLOCK,
+            Genre.GENRE,
             Gig.GIG,
             Performance.PERFORMANCE,
             Venue.VENUE);

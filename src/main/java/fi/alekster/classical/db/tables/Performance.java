@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Performance extends TableImpl<PerformanceRecord> {
 
-    private static final long serialVersionUID = 1753595702;
+    private static final long serialVersionUID = 2136667426;
 
     /**
      * The reference instance of <code>public.performance</code>
@@ -75,6 +75,26 @@ public class Performance extends TableImpl<PerformanceRecord> {
      * The column <code>public.performance.description</code>.
      */
     public final TableField<PerformanceRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.VARCHAR.length(700), this, "");
+
+    /**
+     * The column <code>public.performance.conductor</code>.
+     */
+    public final TableField<PerformanceRecord, String> CONDUCTOR = createField("conductor", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+    /**
+     * The column <code>public.performance.players</code>.
+     */
+    public final TableField<PerformanceRecord, String> PLAYERS = createField("players", org.jooq.impl.SQLDataType.VARCHAR.length(512), this, "");
+
+    /**
+     * The column <code>public.performance.youtube_id</code>.
+     */
+    public final TableField<PerformanceRecord, String> YOUTUBE_ID = createField("youtube_id", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+
+    /**
+     * The column <code>public.performance.genre_id</code>.
+     */
+    public final TableField<PerformanceRecord, Long> GENRE_ID = createField("genre_id", org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     /**
      * Create a <code>public.performance</code> table reference
@@ -135,7 +155,7 @@ public class Performance extends TableImpl<PerformanceRecord> {
      */
     @Override
     public List<ForeignKey<PerformanceRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<PerformanceRecord, ?>>asList(Keys.PERFORMANCE__FK_PERFORMANCE_AUTHOR, Keys.PERFORMANCE__FK_PERFORMANCE_GIG);
+        return Arrays.<ForeignKey<PerformanceRecord, ?>>asList(Keys.PERFORMANCE__FK_PERFORMANCE_AUTHOR, Keys.PERFORMANCE__FK_PERFORMANCE_GIG, Keys.PERFORMANCE__FK_PERFORMANCE_GENRE);
     }
 
     /**

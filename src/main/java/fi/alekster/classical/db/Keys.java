@@ -6,11 +6,13 @@ package fi.alekster.classical.db;
 
 import fi.alekster.classical.db.tables.Author;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
+import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.Venue;
 import fi.alekster.classical.db.tables.records.AuthorRecord;
 import fi.alekster.classical.db.tables.records.DatabasechangeloglockRecord;
+import fi.alekster.classical.db.tables.records.GenreRecord;
 import fi.alekster.classical.db.tables.records.GigRecord;
 import fi.alekster.classical.db.tables.records.PerformanceRecord;
 import fi.alekster.classical.db.tables.records.VenueRecord;
@@ -42,6 +44,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final Identity<AuthorRecord, Long> IDENTITY_AUTHOR = Identities0.IDENTITY_AUTHOR;
+    public static final Identity<GenreRecord, Long> IDENTITY_GENRE = Identities0.IDENTITY_GENRE;
     public static final Identity<GigRecord, Long> IDENTITY_GIG = Identities0.IDENTITY_GIG;
     public static final Identity<PerformanceRecord, Long> IDENTITY_PERFORMANCE = Identities0.IDENTITY_PERFORMANCE;
     public static final Identity<VenueRecord, Long> IDENTITY_VENUE = Identities0.IDENTITY_VENUE;
@@ -52,6 +55,7 @@ public class Keys {
 
     public static final UniqueKey<AuthorRecord> PK_AUTHOR = UniqueKeys0.PK_AUTHOR;
     public static final UniqueKey<DatabasechangeloglockRecord> PK_DATABASECHANGELOGLOCK = UniqueKeys0.PK_DATABASECHANGELOGLOCK;
+    public static final UniqueKey<GenreRecord> PK_GENRE = UniqueKeys0.PK_GENRE;
     public static final UniqueKey<GigRecord> PK_GIG = UniqueKeys0.PK_GIG;
     public static final UniqueKey<PerformanceRecord> PK_PERFORMANCE = UniqueKeys0.PK_PERFORMANCE;
     public static final UniqueKey<VenueRecord> PK_VENUE = UniqueKeys0.PK_VENUE;
@@ -63,6 +67,7 @@ public class Keys {
     public static final ForeignKey<GigRecord, VenueRecord> GIG__FK_GIG_VENUE = ForeignKeys0.GIG__FK_GIG_VENUE;
     public static final ForeignKey<PerformanceRecord, AuthorRecord> PERFORMANCE__FK_PERFORMANCE_AUTHOR = ForeignKeys0.PERFORMANCE__FK_PERFORMANCE_AUTHOR;
     public static final ForeignKey<PerformanceRecord, GigRecord> PERFORMANCE__FK_PERFORMANCE_GIG = ForeignKeys0.PERFORMANCE__FK_PERFORMANCE_GIG;
+    public static final ForeignKey<PerformanceRecord, GenreRecord> PERFORMANCE__FK_PERFORMANCE_GENRE = ForeignKeys0.PERFORMANCE__FK_PERFORMANCE_GENRE;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -70,6 +75,7 @@ public class Keys {
 
     private static class Identities0 extends AbstractKeys {
         public static Identity<AuthorRecord, Long> IDENTITY_AUTHOR = createIdentity(Author.AUTHOR, Author.AUTHOR.ID);
+        public static Identity<GenreRecord, Long> IDENTITY_GENRE = createIdentity(Genre.GENRE, Genre.GENRE.ID);
         public static Identity<GigRecord, Long> IDENTITY_GIG = createIdentity(Gig.GIG, Gig.GIG.ID);
         public static Identity<PerformanceRecord, Long> IDENTITY_PERFORMANCE = createIdentity(Performance.PERFORMANCE, Performance.PERFORMANCE.ID);
         public static Identity<VenueRecord, Long> IDENTITY_VENUE = createIdentity(Venue.VENUE, Venue.VENUE.ID);
@@ -78,6 +84,7 @@ public class Keys {
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<AuthorRecord> PK_AUTHOR = createUniqueKey(Author.AUTHOR, "pk_author", Author.AUTHOR.ID);
         public static final UniqueKey<DatabasechangeloglockRecord> PK_DATABASECHANGELOGLOCK = createUniqueKey(Databasechangeloglock.DATABASECHANGELOGLOCK, "pk_databasechangeloglock", Databasechangeloglock.DATABASECHANGELOGLOCK.ID);
+        public static final UniqueKey<GenreRecord> PK_GENRE = createUniqueKey(Genre.GENRE, "pk_genre", Genre.GENRE.ID);
         public static final UniqueKey<GigRecord> PK_GIG = createUniqueKey(Gig.GIG, "pk_gig", Gig.GIG.ID);
         public static final UniqueKey<PerformanceRecord> PK_PERFORMANCE = createUniqueKey(Performance.PERFORMANCE, "pk_performance", Performance.PERFORMANCE.ID);
         public static final UniqueKey<VenueRecord> PK_VENUE = createUniqueKey(Venue.VENUE, "pk_venue", Venue.VENUE.ID);
@@ -87,5 +94,6 @@ public class Keys {
         public static final ForeignKey<GigRecord, VenueRecord> GIG__FK_GIG_VENUE = createForeignKey(fi.alekster.classical.db.Keys.PK_VENUE, Gig.GIG, "gig__fk_gig_venue", Gig.GIG.VENUE_ID);
         public static final ForeignKey<PerformanceRecord, AuthorRecord> PERFORMANCE__FK_PERFORMANCE_AUTHOR = createForeignKey(fi.alekster.classical.db.Keys.PK_AUTHOR, Performance.PERFORMANCE, "performance__fk_performance_author", Performance.PERFORMANCE.AUTHOR_ID);
         public static final ForeignKey<PerformanceRecord, GigRecord> PERFORMANCE__FK_PERFORMANCE_GIG = createForeignKey(fi.alekster.classical.db.Keys.PK_GIG, Performance.PERFORMANCE, "performance__fk_performance_gig", Performance.PERFORMANCE.GIG_ID);
+        public static final ForeignKey<PerformanceRecord, GenreRecord> PERFORMANCE__FK_PERFORMANCE_GENRE = createForeignKey(fi.alekster.classical.db.Keys.PK_GENRE, Performance.PERFORMANCE, "performance__fk_performance_genre", Performance.PERFORMANCE.GENRE_ID);
     }
 }

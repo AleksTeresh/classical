@@ -8,6 +8,75 @@
     <changeSet id="1-data" author="Aleksandr Tereshchenko">
         <insert
                 schemaName="public"
+                tableName="genre">
+            <column name="id" value="1" />
+            <column name="name" value="Classical concert" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="2" />
+            <column name="name" value="Opera" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="3" />
+            <column name="name" value="Ballet" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="4" />
+            <column name="name" value="Jazz" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="5" />
+            <column name="name" value="Contemporary" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="6" />
+            <column name="name" value="Contemporary" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="7" />
+            <column name="name" value="Folk" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="8" />
+            <column name="name" value="Musical" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="9" />
+            <column name="name" value="Pop" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="10" />
+            <column name="name" value="Rock" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="11" />
+            <column name="name" value="Blues" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="2-data" author="Aleksandr Tereshchenko">
+        <insert
+                schemaName="public"
                 tableName="venue">
             <column name="id" value="1" />
             <column name="name" value="Musiikkitalo" />
@@ -80,6 +149,8 @@
             <column name="id" value="1" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="1" />
+            <column name="genre_id" value="1" />
+            <column name="youtube_id" value="yJpJ8REjvqo" />
             <column name="name" value="2nd Concetro for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
         </insert>
@@ -89,6 +160,8 @@
             <column name="id" value="2" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="1" />
+            <column name="genre_id" value="1" />
+            <column name="youtube_id" value="2lha9QArvqw" />
             <column name="name" value="Rhapsody on the theme of Paganini" />
             <column name="description" value="Some sensible description follows her" />
         </insert>
@@ -98,6 +171,8 @@
             <column name="id" value="3" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="2" />
+            <column name="genre_id" value="1" />
+            <column name="youtube_id" value="MOOfoW5_2iE" />
             <column name="name" value="3rd Concerto for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
         </insert>
@@ -107,6 +182,8 @@
             <column name="id" value="4" />
             <column name="author_id" value="1" />
             <column name="gig_id" value="2" />
+            <column name="genre_id" value="1" />
+            <column name="youtube_id" value="jmdkTsjFI-s" />
             <column name="name" value="4th Concerto for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
         </insert>
@@ -116,6 +193,8 @@
             <column name="id" value="5" />
             <column name="author_id" value="2" />
             <column name="gig_id" value="3" />
+            <column name="genre_id" value="1" />
+            <column name="youtube_id" value="Yue6Cb5OULM" />
             <column name="name" value="1st Concetro for piano and orchestra" />
             <column name="description" value="Some sensible description follows here" />
         </insert>

@@ -6,6 +6,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet id="1" author="Aleksandr Tereshchenko">
+        <createTable tableName="genre">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
         <createTable tableName="venue">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
@@ -46,6 +55,9 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="wikipedia_link" type="varchar(300)">
                 <constraints nullable="true" />
             </column>
@@ -67,6 +79,18 @@
             <column name="description" type="varchar(700)">
                 <constraints nullable="true" />
             </column>
+            <column name="conductor" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="players" type="varchar(512)">
+                <constraints nullable="true" />
+            </column>
+            <column name="youtube_id" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="genre_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
         </createTable>
 
         <!-- Foreign key constraints -->
@@ -86,6 +110,12 @@
                                  baseColumnNames="gig_id"
                                  constraintName="fk_performance_gig"
                                  referencedTableName="gig"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="performance"
+                                 baseColumnNames="genre_id"
+                                 constraintName="fk_performance_genre"
+                                 referencedTableName="genre"
                                  referencedColumnNames="id" />
 
     </changeSet>

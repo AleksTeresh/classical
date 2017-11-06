@@ -7,6 +7,7 @@ package fi.alekster.classical.db;
 import fi.alekster.classical.db.tables.Author;
 import fi.alekster.classical.db.tables.Databasechangelog;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
+import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.Venue;
@@ -41,6 +42,11 @@ public class Tables {
      * The table <code>public.databasechangeloglock</code>.
      */
     public static final Databasechangeloglock DATABASECHANGELOGLOCK = fi.alekster.classical.db.tables.Databasechangeloglock.DATABASECHANGELOGLOCK;
+
+    /**
+     * The table <code>public.genre</code>.
+     */
+    public static final Genre GENRE = fi.alekster.classical.db.tables.Genre.GENRE;
 
     /**
      * The table <code>public.gig</code>.

@@ -72,6 +72,13 @@ public class AuthorDao extends DAOImpl<AuthorRecord, fi.alekster.classical.db.ta
     }
 
     /**
+     * Fetch records that have <code>description IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Author> fetchByDescription(String... values) {
+        return fetch(Author.AUTHOR.DESCRIPTION, values);
+    }
+
+    /**
      * Fetch records that have <code>wikipedia_link IN (values)</code>
      */
     public List<fi.alekster.classical.db.tables.pojos.Author> fetchByWikipediaLink(String... values) {

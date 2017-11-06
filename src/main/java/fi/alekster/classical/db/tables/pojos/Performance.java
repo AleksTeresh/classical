@@ -22,13 +22,17 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Performance implements Serializable {
 
-    private static final long serialVersionUID = -1068039723;
+    private static final long serialVersionUID = 1616394952;
 
     private Long   id;
     private Long   authorId;
     private Long   gigId;
     private String name;
     private String description;
+    private String conductor;
+    private String players;
+    private String youtubeId;
+    private Long   genreId;
 
     public Performance() {}
 
@@ -38,6 +42,10 @@ public class Performance implements Serializable {
         this.gigId = value.gigId;
         this.name = value.name;
         this.description = value.description;
+        this.conductor = value.conductor;
+        this.players = value.players;
+        this.youtubeId = value.youtubeId;
+        this.genreId = value.genreId;
     }
 
     public Performance(
@@ -45,13 +53,21 @@ public class Performance implements Serializable {
         Long   authorId,
         Long   gigId,
         String name,
-        String description
+        String description,
+        String conductor,
+        String players,
+        String youtubeId,
+        Long   genreId
     ) {
         this.id = id;
         this.authorId = authorId;
         this.gigId = gigId;
         this.name = name;
         this.description = description;
+        this.conductor = conductor;
+        this.players = players;
+        this.youtubeId = youtubeId;
+        this.genreId = genreId;
     }
 
     public Long getId() {
@@ -94,6 +110,38 @@ public class Performance implements Serializable {
         this.description = description;
     }
 
+    public String getConductor() {
+        return this.conductor;
+    }
+
+    public void setConductor(String conductor) {
+        this.conductor = conductor;
+    }
+
+    public String getPlayers() {
+        return this.players;
+    }
+
+    public void setPlayers(String players) {
+        this.players = players;
+    }
+
+    public String getYoutubeId() {
+        return this.youtubeId;
+    }
+
+    public void setYoutubeId(String youtubeId) {
+        this.youtubeId = youtubeId;
+    }
+
+    public Long getGenreId() {
+        return this.genreId;
+    }
+
+    public void setGenreId(Long genreId) {
+        this.genreId = genreId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Performance (");
@@ -103,6 +151,10 @@ public class Performance implements Serializable {
         sb.append(", ").append(gigId);
         sb.append(", ").append(name);
         sb.append(", ").append(description);
+        sb.append(", ").append(conductor);
+        sb.append(", ").append(players);
+        sb.append(", ").append(youtubeId);
+        sb.append(", ").append(genreId);
 
         sb.append(")");
         return sb.toString();
