@@ -22,7 +22,7 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="varchar(700)">
+            <column name="description" type="varchar(800)">
                 <constraints nullable="true" />
             </column>
         </createTable>
@@ -37,7 +37,7 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="varchar(700)">
+            <column name="description" type="clob">
                 <constraints nullable="true" />
             </column>
             <column name="timestamp" type="datetime" >
@@ -55,7 +55,7 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="description" type="varchar(255)">
+            <column name="description" type="clob">
                 <constraints nullable="true" />
             </column>
             <column name="wikipedia_link" type="varchar(300)">

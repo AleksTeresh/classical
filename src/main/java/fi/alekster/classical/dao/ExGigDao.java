@@ -10,6 +10,7 @@ import org.jooq.SelectConditionStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,21 @@ public class ExGigDao extends GigDao {
         return getConditionStep(keyPhrase, authorId, genreIds, venueId)
                 .fetch()
                 .size();
+    }
+
+    public boolean exists (
+            String name,
+            Timestamp timestamp,
+            Long venueId
+    ) {
+        return dsl.select()
+                .from(Tables.GIG)
+                .where(Tables.GIG.NAME.equal(name)
+                        .and(Tables.GIG.TIMESTAMP.equal(timestamp))
+                        .and(Tables.GIG.VENUE_ID.equal(venueId)))
+                .limit(1)
+                .fetch()
+                .size() > 0;
     }
 
     public List<Gig> fetch (
