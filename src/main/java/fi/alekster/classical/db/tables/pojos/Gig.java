@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Gig implements Serializable {
 
-    private static final long serialVersionUID = -592812009;
+    private static final long serialVersionUID = 1037943820;
 
     private Long      id;
     private Long      venueId;
@@ -31,6 +31,8 @@ public class Gig implements Serializable {
     private String    description;
     private Timestamp timestamp;
     private Integer   duration;
+    private String    imageUrl;
+    private String    url;
 
     public Gig() {}
 
@@ -41,6 +43,8 @@ public class Gig implements Serializable {
         this.description = value.description;
         this.timestamp = value.timestamp;
         this.duration = value.duration;
+        this.imageUrl = value.imageUrl;
+        this.url = value.url;
     }
 
     public Gig(
@@ -49,7 +53,9 @@ public class Gig implements Serializable {
         String    name,
         String    description,
         Timestamp timestamp,
-        Integer   duration
+        Integer   duration,
+        String    imageUrl,
+        String    url
     ) {
         this.id = id;
         this.venueId = venueId;
@@ -57,6 +63,8 @@ public class Gig implements Serializable {
         this.description = description;
         this.timestamp = timestamp;
         this.duration = duration;
+        this.imageUrl = imageUrl;
+        this.url = url;
     }
 
     public Long getId() {
@@ -107,6 +115,22 @@ public class Gig implements Serializable {
         this.duration = duration;
     }
 
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Gig (");
@@ -117,6 +141,8 @@ public class Gig implements Serializable {
         sb.append(", ").append(description);
         sb.append(", ").append(timestamp);
         sb.append(", ").append(duration);
+        sb.append(", ").append(imageUrl);
+        sb.append(", ").append(url);
 
         sb.append(")");
         return sb.toString();

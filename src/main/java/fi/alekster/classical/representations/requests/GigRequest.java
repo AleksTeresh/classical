@@ -26,6 +26,12 @@ public class GigRequest {
     @JsonProperty
     private Long venue;
 
+    @JsonProperty
+    private String imageUrl;
+
+    @JsonProperty
+    private String url;
+
     public GigRequest() {}
 
     public GigRequest(
@@ -34,7 +40,9 @@ public class GigRequest {
             String timestamp,
             String duration,
             List<PerformanceRequest> performances,
-            Long venue
+            Long venue,
+            String imageUrl,
+            String url
     ) {
         this.name = name;
         this.description = description;
@@ -42,6 +50,8 @@ public class GigRequest {
         this.duration = duration;
         this.performances = performances;
         this.venue = venue;
+        this.imageUrl = imageUrl;
+        this.url = url;
     }
 
     public String getName() {
@@ -66,5 +76,13 @@ public class GigRequest {
 
     public List<PerformanceRequest> getPerformances() {
         return this.performances;
+    }
+
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 }

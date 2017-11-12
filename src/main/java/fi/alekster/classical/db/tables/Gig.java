@@ -37,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Gig extends TableImpl<GigRecord> {
 
-    private static final long serialVersionUID = -1136816249;
+    private static final long serialVersionUID = -314127253;
 
     /**
      * The reference instance of <code>public.gig</code>
@@ -70,7 +70,7 @@ public class Gig extends TableImpl<GigRecord> {
     /**
      * The column <code>public.gig.description</code>.
      */
-    public final TableField<GigRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.VARCHAR.length(700), this, "");
+    public final TableField<GigRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>public.gig.timestamp</code>.
@@ -81,6 +81,16 @@ public class Gig extends TableImpl<GigRecord> {
      * The column <code>public.gig.duration</code>.
      */
     public final TableField<GigRecord, Integer> DURATION = createField("duration", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+    /**
+     * The column <code>public.gig.image_url</code>.
+     */
+    public final TableField<GigRecord, String> IMAGE_URL = createField("image_url", org.jooq.impl.SQLDataType.VARCHAR.length(511), this, "");
+
+    /**
+     * The column <code>public.gig.url</code>.
+     */
+    public final TableField<GigRecord, String> URL = createField("url", org.jooq.impl.SQLDataType.VARCHAR.length(511).nullable(false), this, "");
 
     /**
      * Create a <code>public.gig</code> table reference

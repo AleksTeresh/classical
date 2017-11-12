@@ -106,6 +106,7 @@
             <column name="description" value="Piano Concert No. 2 and Rhapsody on the theme of Paganini" />
             <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
             <column name="duration" value="7200" />
+            <column name="url" value="classical.dynu.net" />
         </insert>
         <insert
                 schemaName="public"
@@ -116,6 +117,7 @@
             <column name="description" value="Piano Concert No. 3 and 4" />
             <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
             <column name="duration" value="7200" />
+            <column name="url" value="classical.dynu.net" />
         </insert>
         <insert
                 schemaName="public"
@@ -126,6 +128,7 @@
             <column name="description" value="Some proper description here" />
             <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
             <column name="duration" value="7200" />
+            <column name="url" value="classical.dynu.net" />
         </insert>
 
         <insert

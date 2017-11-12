@@ -99,4 +99,18 @@ public class GigDao extends DAOImpl<GigRecord, fi.alekster.classical.db.tables.p
     public List<fi.alekster.classical.db.tables.pojos.Gig> fetchByDuration(Integer... values) {
         return fetch(Gig.GIG.DURATION, values);
     }
+
+    /**
+     * Fetch records that have <code>image_url IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Gig> fetchByImageUrl(String... values) {
+        return fetch(Gig.GIG.IMAGE_URL, values);
+    }
+
+    /**
+     * Fetch records that have <code>url IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Gig> fetchByUrl(String... values) {
+        return fetch(Gig.GIG.URL, values);
+    }
 }

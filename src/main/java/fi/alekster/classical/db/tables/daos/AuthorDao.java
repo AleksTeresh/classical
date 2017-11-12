@@ -84,4 +84,11 @@ public class AuthorDao extends DAOImpl<AuthorRecord, fi.alekster.classical.db.ta
     public List<fi.alekster.classical.db.tables.pojos.Author> fetchByWikipediaLink(String... values) {
         return fetch(Author.AUTHOR.WIKIPEDIA_LINK, values);
     }
+
+    /**
+     * Fetch records that have <code>image_url IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Author> fetchByImageUrl(String... values) {
+        return fetch(Author.AUTHOR.IMAGE_URL, values);
+    }
 }

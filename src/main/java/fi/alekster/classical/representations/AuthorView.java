@@ -19,18 +19,23 @@ public class AuthorView {
     @JsonProperty
     private String wikipediaLink;
 
+    @JsonProperty
+    private String imageUrl;
+
     public AuthorView () {}
 
     public AuthorView(
             Long id,
             String name,
             String description,
-            String wikipediaLink
+            String wikipediaLink,
+            String imageUrl
     ) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.wikipediaLink = wikipediaLink;
+        this.imageUrl = imageUrl;
     }
 
     public static AuthorView fromEntity(Author author) {
@@ -38,7 +43,8 @@ public class AuthorView {
                 author.getId(),
                 author.getName(),
                 author.getDescription(),
-                author.getWikipediaLink()
+                author.getWikipediaLink(),
+                author.getImageUrl()
         );
     }
 }

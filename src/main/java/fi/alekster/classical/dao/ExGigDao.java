@@ -72,7 +72,9 @@ public class ExGigDao extends GigDao {
                         p.get(Tables.GIG.NAME),
                         p.get(Tables.GIG.DESCRIPTION),
                         p.get(Tables.GIG.TIMESTAMP),
-                        p.get(Tables.GIG.DURATION)
+                        p.get(Tables.GIG.DURATION),
+                        p.get(Tables.GIG.IMAGE_URL),
+                        p.get(Tables.GIG.URL)
                 )).collect(Collectors.toList());
     }
 

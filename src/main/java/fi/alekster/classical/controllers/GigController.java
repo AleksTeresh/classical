@@ -163,7 +163,9 @@ public class GigController {
                 input.getName(),
                 input.getDescription(),
                 timestamp,
-                0
+                0,
+                input.getImageUrl(),
+                input.getUrl()
         );
         gigDao.insert(newGig);
         performances.stream()
@@ -183,7 +185,8 @@ public class GigController {
                 authorDao.count() + 1,
                 name,
                 wikiFetcher.fetchDescription(name),
-                wikiFetcher.fetchUrl(name)
+                wikiFetcher.fetchUrl(name),
+                "" // TODO: use wikiFetcher to get an actual image
         );
     }
 

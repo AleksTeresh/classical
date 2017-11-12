@@ -22,12 +22,13 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Author implements Serializable {
 
-    private static final long serialVersionUID = -59957226;
+    private static final long serialVersionUID = -1596995678;
 
     private Long   id;
     private String name;
     private String description;
     private String wikipediaLink;
+    private String imageUrl;
 
     public Author() {}
 
@@ -36,18 +37,21 @@ public class Author implements Serializable {
         this.name = value.name;
         this.description = value.description;
         this.wikipediaLink = value.wikipediaLink;
+        this.imageUrl = value.imageUrl;
     }
 
     public Author(
         Long   id,
         String name,
         String description,
-        String wikipediaLink
+        String wikipediaLink,
+        String imageUrl
     ) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.wikipediaLink = wikipediaLink;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -82,6 +86,14 @@ public class Author implements Serializable {
         this.wikipediaLink = wikipediaLink;
     }
 
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Author (");
@@ -90,6 +102,7 @@ public class Author implements Serializable {
         sb.append(", ").append(name);
         sb.append(", ").append(description);
         sb.append(", ").append(wikipediaLink);
+        sb.append(", ").append(imageUrl);
 
         sb.append(")");
         return sb.toString();

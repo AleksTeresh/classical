@@ -48,7 +48,8 @@ public class ExAuthorDao extends AuthorDao {
                         p.getValue(Tables.AUTHOR.ID),
                         p.get(Tables.AUTHOR.NAME),
                         p.get(Tables.AUTHOR.DESCRIPTION),
-                        p.get(Tables.AUTHOR.WIKIPEDIA_LINK)
+                        p.get(Tables.AUTHOR.WIKIPEDIA_LINK),
+                        p.get(Tables.AUTHOR.IMAGE_URL)
                 )).collect(Collectors.toList());
     }
 
