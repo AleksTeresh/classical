@@ -1,0 +1,16 @@
+classical-db:
+  image: library/postgres:9.5
+  environment:
+    POSTGRES_DB: classical
+classical-scrape:
+  image: alekster/classical-scrape
+classical:
+  image: alekster/classical
+  links:
+    - classical-db:db
+  ports:
+    - 8086:8085
+classical-front:
+  image: alekster/classical-front
+  links:
+    - classical:back-end
