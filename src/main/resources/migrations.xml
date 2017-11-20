@@ -6,6 +6,24 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
     <changeSet id="1" author="Aleksandr Tereshchenko">
+        <createTable tableName="credential">
+            <column name="email" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="user">
+            <column name="email" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
         <createTable tableName="genre">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
@@ -51,6 +69,9 @@
             </column>
             <column name="url" type="varchar(511)" >
                 <constraints nullable="false" />
+            </column>
+            <column name="create_time" type="datetime" >
+                <constraints nullable="true" />
             </column>
         </createTable>
 
@@ -108,6 +129,51 @@
             </column>
         </createTable>
 
+        <createTable tableName="watchdog">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="start_date" type="datetime" >
+                <constraints nullable="true" />
+            </column>
+            <column name="end_date" type="datetime" >
+                <constraints nullable="true" />
+            </column>
+            <column name="key_phrase" type="varchar(511)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <createTable tableName="watchdog_author">
+            <column name="watchdog_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="author_id" type="bigint" >
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="watchdog_genre">
+            <column name="watchdog_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="genre_id" type="bigint" >
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="watchdog_venue">
+            <column name="watchdog_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="venue_id" type="bigint" >
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+        </createTable>
+
         <!-- Foreign key constraints -->
         <addForeignKeyConstraint baseTableName="gig"
                                  baseColumnNames="venue_id"
@@ -137,6 +203,54 @@
                                  baseColumnNames="performance_id"
                                  constraintName="fk_performance_genre_performance"
                                  referencedTableName="performance"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="user"
+                                 baseColumnNames="email"
+                                 constraintName="fk_user_credential"
+                                 referencedTableName="credential"
+                                 referencedColumnNames="email" />
+
+        <addForeignKeyConstraint baseTableName="watchdog"
+                                 baseColumnNames="email"
+                                 constraintName="fk_watchdog_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="email" />
+
+        <addForeignKeyConstraint baseTableName="watchdog_author"
+                                 baseColumnNames="watchdog_id"
+                                 constraintName="fk_watchdog_author_watchdog"
+                                 referencedTableName="watchdog"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="watchdog_author"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_watchdog_author_author"
+                                 referencedTableName="author"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="watchdog_genre"
+                                 baseColumnNames="watchdog_id"
+                                 constraintName="fk_watchdog_genre_watchdog"
+                                 referencedTableName="watchdog"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="watchdog_genre"
+                                 baseColumnNames="genre_id"
+                                 constraintName="fk_watchdog_genre_genre"
+                                 referencedTableName="genre"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="watchdog_venue"
+                                 baseColumnNames="watchdog_id"
+                                 constraintName="fk_watchdog_venue_watchdog"
+                                 referencedTableName="watchdog"
+                                 referencedColumnNames="id" />
+
+        <addForeignKeyConstraint baseTableName="watchdog_venue"
+                                 baseColumnNames="venue_id"
+                                 constraintName="fk_watchdog_venue_venue"
+                                 referencedTableName="venue"
                                  referencedColumnNames="id" />
 
     </changeSet>

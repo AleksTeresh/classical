@@ -3,14 +3,12 @@ package fi.alekster.classical.dao;
 import fi.alekster.classical.db.Tables;
 import fi.alekster.classical.db.tables.daos.GigDao;
 import fi.alekster.classical.db.tables.pojos.Gig;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.SelectConditionStep;
+import org.jooq.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,13 +26,27 @@ public class ExGigDao extends GigDao {
         this.dsl = dsl;
     }
 
-    public long count(
+    public long count (
             String keyPhrase,
-            Long authorId,
+            List<Long> authorIds,
             List<Long> genreIds,
-            Long venueId
+            List<Long> venueIds,
+            Date startDate,
+            Date endDate
     ) {
-        return getConditionStep(keyPhrase, authorId, genreIds, venueId)
+        return this.count(keyPhrase, authorIds, genreIds, venueIds, startDate, endDate, null);
+    }
+
+    public long count (
+            String keyPhrase,
+            List<Long> authorIds,
+            List<Long> genreIds,
+            List<Long> venueIds,
+            Date startDate,
+            Date endDate,
+            Date createDate
+    ) {
+        return getConditionStep(keyPhrase, authorIds, genreIds, venueIds, startDate, endDate, createDate)
                 .fetch()
                 .size();
     }
@@ -58,11 +70,27 @@ public class ExGigDao extends GigDao {
             String keyPhrase,
             int limit,
             int offset,
-            Long authorId,
+            List<Long> authorIds,
             List<Long> genreIds,
-            Long venueId
+            List<Long> venueIds,
+            Date startDate,
+            Date endDate
     ) {
-        return getConditionStep(keyPhrase, authorId, genreIds, venueId)
+        return fetch(keyPhrase, limit, offset, authorIds, genreIds, venueIds, startDate, endDate, null);
+    }
+
+    public List<Gig> fetch (
+            String keyPhrase,
+            int limit,
+            int offset,
+            List<Long> authorIds,
+            List<Long> genreIds,
+            List<Long> venueIds,
+            Date startDate,
+            Date endDate,
+            Date createDate
+    ) {
+        return getConditionStep(keyPhrase, authorIds, genreIds, venueIds, startDate, endDate, createDate)
                 .offset(offset)
                 .limit(limit)
                 .stream()
@@ -74,30 +102,34 @@ public class ExGigDao extends GigDao {
                         p.get(Tables.GIG.TIMESTAMP),
                         p.get(Tables.GIG.DURATION),
                         p.get(Tables.GIG.IMAGE_URL),
-                        p.get(Tables.GIG.URL)
+                        p.get(Tables.GIG.URL),
+                        p.get(Tables.GIG.CREATE_TIME)
                 )).collect(Collectors.toList());
     }
 
-    private SelectConditionStep<Record> getConditionStep (
+    private SelectSeekStep1<Record, Timestamp> getConditionStep (
             String keyPhrase,
-            Long authorId,
+            List<Long> authorIds,
             List<Long> genreIds,
-            Long venueId
+            List<Long> venueIds,
+            Date startDate,
+            Date endDate,
+            Date createDate
     ) {
         Condition condition = Tables.GIG.NAME.contains(keyPhrase)
                 .or(Tables.GIG.DESCRIPTION.contains(keyPhrase));
         // TODO: add conditions for searching the keyPhrase in names and descriptions of the associated performances
-        if (authorId != null) {
+        if (authorIds != null) {
             condition = condition.and(Tables.GIG.ID.in(
                     dsl.select(Tables.PERFORMANCE.GIG_ID)
                             .from(Tables.PERFORMANCE)
-                            .where(Tables.PERFORMANCE.AUTHOR_ID.equal(authorId))
+                            .where(Tables.PERFORMANCE.AUTHOR_ID.in(authorIds))
             ));
         }
-        if (venueId != null) {
-            condition = condition.and(Tables.GIG.VENUE_ID.equal(venueId));
+        if (venueIds != null) {
+            condition = condition.and(Tables.GIG.VENUE_ID.in(venueIds));
         }
-        if (genreIds != null && genreIds.size() != 0) {
+        if (genreIds != null) {
             condition = condition.and(Tables.GIG.ID.in(
                     dsl.select(Tables.PERFORMANCE.GIG_ID)
                             .from(Tables.PERFORMANCE)
@@ -108,10 +140,21 @@ public class ExGigDao extends GigDao {
                             ))
             ));
         }
+        if (startDate != null) {
+            condition = condition.and(Tables.GIG.TIMESTAMP.greaterOrEqual(new Timestamp(startDate.getTime())));
+        }
+        if (endDate != null) {
+            condition = condition.and(Tables.GIG.TIMESTAMP.lessOrEqual(new Timestamp(endDate.getTime())));
+        }
 
-        SelectConditionStep<Record> conditionStep = dsl.select()
+        if (createDate != null) {
+            condition = condition.and(Tables.GIG.CREATE_TIME.greaterOrEqual(new Timestamp(createDate.getTime())));
+        }
+
+        SelectSeekStep1<Record, Timestamp> conditionStep = dsl.select()
                 .from(Tables.GIG)
-                .where(condition);
+                .where(condition)
+                .orderBy(Tables.GIG.TIMESTAMP);
 
         return conditionStep;
     }

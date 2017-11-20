@@ -113,4 +113,11 @@ public class GigDao extends DAOImpl<GigRecord, fi.alekster.classical.db.tables.p
     public List<fi.alekster.classical.db.tables.pojos.Gig> fetchByUrl(String... values) {
         return fetch(Gig.GIG.URL, values);
     }
+
+    /**
+     * Fetch records that have <code>create_time IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Gig> fetchByCreateTime(Timestamp... values) {
+        return fetch(Gig.GIG.CREATE_TIME, values);
+    }
 }

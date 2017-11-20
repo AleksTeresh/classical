@@ -3,10 +3,7 @@ package fi.alekster.classical.dao;
 import fi.alekster.classical.db.Tables;
 import fi.alekster.classical.db.tables.daos.AuthorDao;
 import fi.alekster.classical.db.tables.pojos.Author;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.SelectConditionStep;
+import org.jooq.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -53,15 +50,16 @@ public class ExAuthorDao extends AuthorDao {
                 )).collect(Collectors.toList());
     }
 
-    private SelectConditionStep<Record> getConditionStep (
+    private SelectSeekStep1<Record, String> getConditionStep (
             String keyPhrase
     ) {
         Condition condition = Tables.AUTHOR.NAME.contains(keyPhrase)
                 .or(Tables.AUTHOR.DESCRIPTION.contains(keyPhrase));
 
-        SelectConditionStep<Record> conditionStep = dsl.select()
+        SelectSeekStep1<Record, String> conditionStep = dsl.select()
                 .from(Tables.AUTHOR)
-                .where(condition);
+                .where(condition)
+                .orderBy(Tables.AUTHOR.NAME);
 
         return conditionStep;
     }

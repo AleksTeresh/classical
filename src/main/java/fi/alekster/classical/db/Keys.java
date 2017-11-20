@@ -5,19 +5,31 @@ package fi.alekster.classical.db;
 
 
 import fi.alekster.classical.db.tables.Author;
+import fi.alekster.classical.db.tables.Credential;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.PerformanceGenre;
+import fi.alekster.classical.db.tables.User;
 import fi.alekster.classical.db.tables.Venue;
+import fi.alekster.classical.db.tables.Watchdog;
+import fi.alekster.classical.db.tables.WatchdogAuthor;
+import fi.alekster.classical.db.tables.WatchdogGenre;
+import fi.alekster.classical.db.tables.WatchdogVenue;
 import fi.alekster.classical.db.tables.records.AuthorRecord;
+import fi.alekster.classical.db.tables.records.CredentialRecord;
 import fi.alekster.classical.db.tables.records.DatabasechangeloglockRecord;
 import fi.alekster.classical.db.tables.records.GenreRecord;
 import fi.alekster.classical.db.tables.records.GigRecord;
 import fi.alekster.classical.db.tables.records.PerformanceGenreRecord;
 import fi.alekster.classical.db.tables.records.PerformanceRecord;
+import fi.alekster.classical.db.tables.records.UserRecord;
 import fi.alekster.classical.db.tables.records.VenueRecord;
+import fi.alekster.classical.db.tables.records.WatchdogAuthorRecord;
+import fi.alekster.classical.db.tables.records.WatchdogGenreRecord;
+import fi.alekster.classical.db.tables.records.WatchdogRecord;
+import fi.alekster.classical.db.tables.records.WatchdogVenueRecord;
 
 import javax.annotation.Generated;
 
@@ -56,12 +68,18 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<AuthorRecord> PK_AUTHOR = UniqueKeys0.PK_AUTHOR;
+    public static final UniqueKey<CredentialRecord> PK_CREDENTIAL = UniqueKeys0.PK_CREDENTIAL;
     public static final UniqueKey<DatabasechangeloglockRecord> PK_DATABASECHANGELOGLOCK = UniqueKeys0.PK_DATABASECHANGELOGLOCK;
     public static final UniqueKey<GenreRecord> PK_GENRE = UniqueKeys0.PK_GENRE;
     public static final UniqueKey<GigRecord> PK_GIG = UniqueKeys0.PK_GIG;
     public static final UniqueKey<PerformanceRecord> PK_PERFORMANCE = UniqueKeys0.PK_PERFORMANCE;
     public static final UniqueKey<PerformanceGenreRecord> PK_PERFORMANCE_GENRE = UniqueKeys0.PK_PERFORMANCE_GENRE;
+    public static final UniqueKey<UserRecord> PK_USER = UniqueKeys0.PK_USER;
     public static final UniqueKey<VenueRecord> PK_VENUE = UniqueKeys0.PK_VENUE;
+    public static final UniqueKey<WatchdogRecord> PK_WATCHDOG = UniqueKeys0.PK_WATCHDOG;
+    public static final UniqueKey<WatchdogAuthorRecord> PK_WATCHDOG_AUTHOR = UniqueKeys0.PK_WATCHDOG_AUTHOR;
+    public static final UniqueKey<WatchdogGenreRecord> PK_WATCHDOG_GENRE = UniqueKeys0.PK_WATCHDOG_GENRE;
+    public static final UniqueKey<WatchdogVenueRecord> PK_WATCHDOG_VENUE = UniqueKeys0.PK_WATCHDOG_VENUE;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -72,6 +90,14 @@ public class Keys {
     public static final ForeignKey<PerformanceRecord, GigRecord> PERFORMANCE__FK_PERFORMANCE_GIG = ForeignKeys0.PERFORMANCE__FK_PERFORMANCE_GIG;
     public static final ForeignKey<PerformanceGenreRecord, PerformanceRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_PERFORMANCE = ForeignKeys0.PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_PERFORMANCE;
     public static final ForeignKey<PerformanceGenreRecord, GenreRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_GENRE = ForeignKeys0.PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_GENRE;
+    public static final ForeignKey<UserRecord, CredentialRecord> USER__FK_USER_CREDENTIAL = ForeignKeys0.USER__FK_USER_CREDENTIAL;
+    public static final ForeignKey<WatchdogRecord, UserRecord> WATCHDOG__FK_WATCHDOG_USER = ForeignKeys0.WATCHDOG__FK_WATCHDOG_USER;
+    public static final ForeignKey<WatchdogAuthorRecord, WatchdogRecord> WATCHDOG_AUTHOR__FK_WATCHDOG_AUTHOR_WATCHDOG = ForeignKeys0.WATCHDOG_AUTHOR__FK_WATCHDOG_AUTHOR_WATCHDOG;
+    public static final ForeignKey<WatchdogAuthorRecord, AuthorRecord> WATCHDOG_AUTHOR__FK_WATCHDOG_AUTHOR_AUTHOR = ForeignKeys0.WATCHDOG_AUTHOR__FK_WATCHDOG_AUTHOR_AUTHOR;
+    public static final ForeignKey<WatchdogGenreRecord, WatchdogRecord> WATCHDOG_GENRE__FK_WATCHDOG_GENRE_WATCHDOG = ForeignKeys0.WATCHDOG_GENRE__FK_WATCHDOG_GENRE_WATCHDOG;
+    public static final ForeignKey<WatchdogGenreRecord, GenreRecord> WATCHDOG_GENRE__FK_WATCHDOG_GENRE_GENRE = ForeignKeys0.WATCHDOG_GENRE__FK_WATCHDOG_GENRE_GENRE;
+    public static final ForeignKey<WatchdogVenueRecord, WatchdogRecord> WATCHDOG_VENUE__FK_WATCHDOG_VENUE_WATCHDOG = ForeignKeys0.WATCHDOG_VENUE__FK_WATCHDOG_VENUE_WATCHDOG;
+    public static final ForeignKey<WatchdogVenueRecord, VenueRecord> WATCHDOG_VENUE__FK_WATCHDOG_VENUE_VENUE = ForeignKeys0.WATCHDOG_VENUE__FK_WATCHDOG_VENUE_VENUE;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -87,12 +113,18 @@ public class Keys {
 
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<AuthorRecord> PK_AUTHOR = createUniqueKey(Author.AUTHOR, "pk_author", Author.AUTHOR.ID);
+        public static final UniqueKey<CredentialRecord> PK_CREDENTIAL = createUniqueKey(Credential.CREDENTIAL, "pk_credential", Credential.CREDENTIAL.EMAIL);
         public static final UniqueKey<DatabasechangeloglockRecord> PK_DATABASECHANGELOGLOCK = createUniqueKey(Databasechangeloglock.DATABASECHANGELOGLOCK, "pk_databasechangeloglock", Databasechangeloglock.DATABASECHANGELOGLOCK.ID);
         public static final UniqueKey<GenreRecord> PK_GENRE = createUniqueKey(Genre.GENRE, "pk_genre", Genre.GENRE.ID);
         public static final UniqueKey<GigRecord> PK_GIG = createUniqueKey(Gig.GIG, "pk_gig", Gig.GIG.ID);
         public static final UniqueKey<PerformanceRecord> PK_PERFORMANCE = createUniqueKey(Performance.PERFORMANCE, "pk_performance", Performance.PERFORMANCE.ID);
         public static final UniqueKey<PerformanceGenreRecord> PK_PERFORMANCE_GENRE = createUniqueKey(PerformanceGenre.PERFORMANCE_GENRE, "pk_performance_genre", PerformanceGenre.PERFORMANCE_GENRE.PERFORMANCE_ID, PerformanceGenre.PERFORMANCE_GENRE.GENRE_ID);
+        public static final UniqueKey<UserRecord> PK_USER = createUniqueKey(User.USER, "pk_user", User.USER.EMAIL);
         public static final UniqueKey<VenueRecord> PK_VENUE = createUniqueKey(Venue.VENUE, "pk_venue", Venue.VENUE.ID);
+        public static final UniqueKey<WatchdogRecord> PK_WATCHDOG = createUniqueKey(Watchdog.WATCHDOG, "pk_watchdog", Watchdog.WATCHDOG.ID);
+        public static final UniqueKey<WatchdogAuthorRecord> PK_WATCHDOG_AUTHOR = createUniqueKey(WatchdogAuthor.WATCHDOG_AUTHOR, "pk_watchdog_author", WatchdogAuthor.WATCHDOG_AUTHOR.WATCHDOG_ID, WatchdogAuthor.WATCHDOG_AUTHOR.AUTHOR_ID);
+        public static final UniqueKey<WatchdogGenreRecord> PK_WATCHDOG_GENRE = createUniqueKey(WatchdogGenre.WATCHDOG_GENRE, "pk_watchdog_genre", WatchdogGenre.WATCHDOG_GENRE.WATCHDOG_ID, WatchdogGenre.WATCHDOG_GENRE.GENRE_ID);
+        public static final UniqueKey<WatchdogVenueRecord> PK_WATCHDOG_VENUE = createUniqueKey(WatchdogVenue.WATCHDOG_VENUE, "pk_watchdog_venue", WatchdogVenue.WATCHDOG_VENUE.WATCHDOG_ID, WatchdogVenue.WATCHDOG_VENUE.VENUE_ID);
     }
 
     private static class ForeignKeys0 extends AbstractKeys {
@@ -101,5 +133,13 @@ public class Keys {
         public static final ForeignKey<PerformanceRecord, GigRecord> PERFORMANCE__FK_PERFORMANCE_GIG = createForeignKey(fi.alekster.classical.db.Keys.PK_GIG, Performance.PERFORMANCE, "performance__fk_performance_gig", Performance.PERFORMANCE.GIG_ID);
         public static final ForeignKey<PerformanceGenreRecord, PerformanceRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_PERFORMANCE = createForeignKey(fi.alekster.classical.db.Keys.PK_PERFORMANCE, PerformanceGenre.PERFORMANCE_GENRE, "performance_genre__fk_performance_genre_performance", PerformanceGenre.PERFORMANCE_GENRE.PERFORMANCE_ID);
         public static final ForeignKey<PerformanceGenreRecord, GenreRecord> PERFORMANCE_GENRE__FK_PERFORMANCE_GENRE_GENRE = createForeignKey(fi.alekster.classical.db.Keys.PK_GENRE, PerformanceGenre.PERFORMANCE_GENRE, "performance_genre__fk_performance_genre_genre", PerformanceGenre.PERFORMANCE_GENRE.GENRE_ID);
+        public static final ForeignKey<UserRecord, CredentialRecord> USER__FK_USER_CREDENTIAL = createForeignKey(fi.alekster.classical.db.Keys.PK_CREDENTIAL, User.USER, "user__fk_user_credential", User.USER.EMAIL);
+        public static final ForeignKey<WatchdogRecord, UserRecord> WATCHDOG__FK_WATCHDOG_USER = createForeignKey(fi.alekster.classical.db.Keys.PK_USER, Watchdog.WATCHDOG, "watchdog__fk_watchdog_user", Watchdog.WATCHDOG.EMAIL);
+        public static final ForeignKey<WatchdogAuthorRecord, WatchdogRecord> WATCHDOG_AUTHOR__FK_WATCHDOG_AUTHOR_WATCHDOG = createForeignKey(fi.alekster.classical.db.Keys.PK_WATCHDOG, WatchdogAuthor.WATCHDOG_AUTHOR, "watchdog_author__fk_watchdog_author_watchdog", WatchdogAuthor.WATCHDOG_AUTHOR.WATCHDOG_ID);
+        public static final ForeignKey<WatchdogAuthorRecord, AuthorRecord> WATCHDOG_AUTHOR__FK_WATCHDOG_AUTHOR_AUTHOR = createForeignKey(fi.alekster.classical.db.Keys.PK_AUTHOR, WatchdogAuthor.WATCHDOG_AUTHOR, "watchdog_author__fk_watchdog_author_author", WatchdogAuthor.WATCHDOG_AUTHOR.AUTHOR_ID);
+        public static final ForeignKey<WatchdogGenreRecord, WatchdogRecord> WATCHDOG_GENRE__FK_WATCHDOG_GENRE_WATCHDOG = createForeignKey(fi.alekster.classical.db.Keys.PK_WATCHDOG, WatchdogGenre.WATCHDOG_GENRE, "watchdog_genre__fk_watchdog_genre_watchdog", WatchdogGenre.WATCHDOG_GENRE.WATCHDOG_ID);
+        public static final ForeignKey<WatchdogGenreRecord, GenreRecord> WATCHDOG_GENRE__FK_WATCHDOG_GENRE_GENRE = createForeignKey(fi.alekster.classical.db.Keys.PK_GENRE, WatchdogGenre.WATCHDOG_GENRE, "watchdog_genre__fk_watchdog_genre_genre", WatchdogGenre.WATCHDOG_GENRE.GENRE_ID);
+        public static final ForeignKey<WatchdogVenueRecord, WatchdogRecord> WATCHDOG_VENUE__FK_WATCHDOG_VENUE_WATCHDOG = createForeignKey(fi.alekster.classical.db.Keys.PK_WATCHDOG, WatchdogVenue.WATCHDOG_VENUE, "watchdog_venue__fk_watchdog_venue_watchdog", WatchdogVenue.WATCHDOG_VENUE.WATCHDOG_ID);
+        public static final ForeignKey<WatchdogVenueRecord, VenueRecord> WATCHDOG_VENUE__FK_WATCHDOG_VENUE_VENUE = createForeignKey(fi.alekster.classical.db.Keys.PK_VENUE, WatchdogVenue.WATCHDOG_VENUE, "watchdog_venue__fk_watchdog_venue_venue", WatchdogVenue.WATCHDOG_VENUE.VENUE_ID);
     }
 }

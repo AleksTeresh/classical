@@ -77,6 +77,13 @@
     <changeSet id="2-data" author="Aleksandr Tereshchenko">
         <insert
                 schemaName="public"
+                tableName="credential">
+            <column name="email" value="admin@classical.dynu.net" />
+            <column name="password" value="$2a$09$FRCO1mgMG1w/0N9aIqamgO9FughNzZldd9aflnjjLplB7SfsxaVXS" />
+        </insert>
+
+        <insert
+                schemaName="public"
                 tableName="venue">
             <column name="id" value="1" />
             <column name="name" value="Musiikkitalo" />
@@ -138,12 +145,20 @@
             <column name="name" value="Sergei Rachmaninoff" />
             <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Sergei_Rachmaninoff" />
         </insert>
+
         <insert
                 schemaName="public"
                 tableName="author">
             <column name="id" value="2" />
             <column name="name" value="Pyotr Ilyich Tchaikovsky" />
             <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="author">
+            <column name="id" value="3" />
+            <column name="name" value="Franz Liszt" />
+            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Franz_Liszt" />
         </insert>
 
         <insert

@@ -4,6 +4,7 @@ import fi.alekster.classical.dao.*;
 import fi.alekster.classical.db.tables.pojos.Author;
 import fi.alekster.classical.db.tables.pojos.Gig;
 import fi.alekster.classical.db.tables.pojos.Performance;
+import fi.alekster.classical.email.EmailHandler;
 import fi.alekster.classical.representations.*;
 import fi.alekster.classical.representations.requests.GigRequest;
 import fi.alekster.classical.representations.requests.PerformanceRequest;
@@ -15,9 +16,11 @@ import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +40,7 @@ public class GigController {
 
     private final YoutubeSearcher youtubeSearcher;
     private final WikiFetcher wikiFetcher;
+    private final EmailHandler emailHandler;
 
     @Autowired
     public GigController(
@@ -46,8 +50,10 @@ public class GigController {
             ExGenreDao genreDao,
             ExVenueDao venueDao,
             YoutubeSearcher youtubeSearcher,
-            WikiFetcher wikiFetcher
+            WikiFetcher wikiFetcher,
+            EmailHandler emailHandler
     ) {
+        System.out.println("Constructor has been called");
         this.gigDao = gigDao;
         this.performanceDao = performanceDao;
         this.authorDao = authorDao;
@@ -56,6 +62,7 @@ public class GigController {
 
         this.youtubeSearcher = youtubeSearcher;
         this.wikiFetcher = wikiFetcher;
+        this.emailHandler = emailHandler;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -63,12 +70,17 @@ public class GigController {
             @RequestParam(value = "keyPhrase", defaultValue = "", required = false) String keyPhrase,
             @RequestParam(value = "limit", defaultValue = "10") int limit,
             @RequestParam(value = "offset", defaultValue = "0") int offset,
-            @RequestParam(value = "author", defaultValue = "", required = false) Long authorId,
-            @RequestParam(value = "genre", required = false) List<Long> genreIds,
-            @RequestParam(value = "venue", defaultValue = "", required = false) Long venueId
+            @RequestParam(value = "authors", required = false) List<Long> authorIds,
+            @RequestParam(value = "genres", required = false) List<Long> genreIds,
+            @RequestParam(value = "venues", required = false) List<Long> venueIds,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate
     ) {
-        Long count = gigDao.count(keyPhrase, authorId, genreIds, venueId);
-        List<GigView> gigs = gigDao.fetch(keyPhrase, limit, offset, authorId, genreIds, venueId)
+        if (startDate == null) {
+            startDate = new Date();
+        }
+        Long count = gigDao.count(keyPhrase, authorIds, genreIds, venueIds, startDate, endDate);
+        List<GigView> gigs = gigDao.fetch(keyPhrase, limit, offset, authorIds, genreIds, venueIds, startDate, endDate)
                 .stream()
                 .map(p -> GigView.fromEntity(
                         p,
@@ -112,6 +124,7 @@ public class GigController {
 
     @RequestMapping(method = RequestMethod.POST)
     public GigView createGig(@RequestBody GigRequest input) {
+
         Timestamp timestamp;
         try {
             DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(input.getTimestamp());
@@ -165,7 +178,8 @@ public class GigController {
                 timestamp,
                 0,
                 input.getImageUrl(),
-                input.getUrl()
+                input.getUrl(),
+                Timestamp.valueOf(new DateTime().toString("yyyy-MM-dd HH:mm:ss"))
         );
         gigDao.insert(newGig);
         performances.stream()
@@ -176,6 +190,8 @@ public class GigController {
                 // TODO: get genre by searching the internet
                 performanceDao.insert(p, 1L);
             });
+
+
 
         return getGig(newGig.getId());
     }

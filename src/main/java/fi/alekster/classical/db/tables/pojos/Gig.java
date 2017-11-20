@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Gig implements Serializable {
 
-    private static final long serialVersionUID = 1037943820;
+    private static final long serialVersionUID = 1326718817;
 
     private Long      id;
     private Long      venueId;
@@ -33,6 +33,7 @@ public class Gig implements Serializable {
     private Integer   duration;
     private String    imageUrl;
     private String    url;
+    private Timestamp createTime;
 
     public Gig() {}
 
@@ -45,6 +46,7 @@ public class Gig implements Serializable {
         this.duration = value.duration;
         this.imageUrl = value.imageUrl;
         this.url = value.url;
+        this.createTime = value.createTime;
     }
 
     public Gig(
@@ -55,7 +57,8 @@ public class Gig implements Serializable {
         Timestamp timestamp,
         Integer   duration,
         String    imageUrl,
-        String    url
+        String    url,
+        Timestamp createTime
     ) {
         this.id = id;
         this.venueId = venueId;
@@ -65,6 +68,7 @@ public class Gig implements Serializable {
         this.duration = duration;
         this.imageUrl = imageUrl;
         this.url = url;
+        this.createTime = createTime;
     }
 
     public Long getId() {
@@ -131,6 +135,14 @@ public class Gig implements Serializable {
         this.url = url;
     }
 
+    public Timestamp getCreateTime() {
+        return this.createTime;
+    }
+
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Gig (");
@@ -143,6 +155,7 @@ public class Gig implements Serializable {
         sb.append(", ").append(duration);
         sb.append(", ").append(imageUrl);
         sb.append(", ").append(url);
+        sb.append(", ").append(createTime);
 
         sb.append(")");
         return sb.toString();

@@ -5,13 +5,19 @@ package fi.alekster.classical.db;
 
 
 import fi.alekster.classical.db.tables.Author;
+import fi.alekster.classical.db.tables.Credential;
 import fi.alekster.classical.db.tables.Databasechangelog;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.PerformanceGenre;
+import fi.alekster.classical.db.tables.User;
 import fi.alekster.classical.db.tables.Venue;
+import fi.alekster.classical.db.tables.Watchdog;
+import fi.alekster.classical.db.tables.WatchdogAuthor;
+import fi.alekster.classical.db.tables.WatchdogGenre;
+import fi.alekster.classical.db.tables.WatchdogVenue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +44,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 1655143549;
+    private static final long serialVersionUID = -733521729;
 
     /**
      * The reference instance of <code>public</code>
@@ -49,6 +55,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.author</code>.
      */
     public final Author AUTHOR = fi.alekster.classical.db.tables.Author.AUTHOR;
+
+    /**
+     * The table <code>public.credential</code>.
+     */
+    public final Credential CREDENTIAL = fi.alekster.classical.db.tables.Credential.CREDENTIAL;
 
     /**
      * The table <code>public.databasechangelog</code>.
@@ -81,9 +92,34 @@ public class Public extends SchemaImpl {
     public final PerformanceGenre PERFORMANCE_GENRE = fi.alekster.classical.db.tables.PerformanceGenre.PERFORMANCE_GENRE;
 
     /**
+     * The table <code>public.user</code>.
+     */
+    public final User USER = fi.alekster.classical.db.tables.User.USER;
+
+    /**
      * The table <code>public.venue</code>.
      */
     public final Venue VENUE = fi.alekster.classical.db.tables.Venue.VENUE;
+
+    /**
+     * The table <code>public.watchdog</code>.
+     */
+    public final Watchdog WATCHDOG = fi.alekster.classical.db.tables.Watchdog.WATCHDOG;
+
+    /**
+     * The table <code>public.watchdog_author</code>.
+     */
+    public final WatchdogAuthor WATCHDOG_AUTHOR = fi.alekster.classical.db.tables.WatchdogAuthor.WATCHDOG_AUTHOR;
+
+    /**
+     * The table <code>public.watchdog_genre</code>.
+     */
+    public final WatchdogGenre WATCHDOG_GENRE = fi.alekster.classical.db.tables.WatchdogGenre.WATCHDOG_GENRE;
+
+    /**
+     * The table <code>public.watchdog_venue</code>.
+     */
+    public final WatchdogVenue WATCHDOG_VENUE = fi.alekster.classical.db.tables.WatchdogVenue.WATCHDOG_VENUE;
 
     /**
      * No further instances allowed
@@ -127,12 +163,18 @@ public class Public extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Author.AUTHOR,
+            Credential.CREDENTIAL,
             Databasechangelog.DATABASECHANGELOG,
             Databasechangeloglock.DATABASECHANGELOGLOCK,
             Genre.GENRE,
             Gig.GIG,
             Performance.PERFORMANCE,
             PerformanceGenre.PERFORMANCE_GENRE,
-            Venue.VENUE);
+            User.USER,
+            Venue.VENUE,
+            Watchdog.WATCHDOG,
+            WatchdogAuthor.WATCHDOG_AUTHOR,
+            WatchdogGenre.WATCHDOG_GENRE,
+            WatchdogVenue.WATCHDOG_VENUE);
     }
 }

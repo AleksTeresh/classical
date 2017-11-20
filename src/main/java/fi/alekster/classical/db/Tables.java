@@ -5,13 +5,19 @@ package fi.alekster.classical.db;
 
 
 import fi.alekster.classical.db.tables.Author;
+import fi.alekster.classical.db.tables.Credential;
 import fi.alekster.classical.db.tables.Databasechangelog;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.PerformanceGenre;
+import fi.alekster.classical.db.tables.User;
 import fi.alekster.classical.db.tables.Venue;
+import fi.alekster.classical.db.tables.Watchdog;
+import fi.alekster.classical.db.tables.WatchdogAuthor;
+import fi.alekster.classical.db.tables.WatchdogGenre;
+import fi.alekster.classical.db.tables.WatchdogVenue;
 
 import javax.annotation.Generated;
 
@@ -33,6 +39,11 @@ public class Tables {
      * The table <code>public.author</code>.
      */
     public static final Author AUTHOR = fi.alekster.classical.db.tables.Author.AUTHOR;
+
+    /**
+     * The table <code>public.credential</code>.
+     */
+    public static final Credential CREDENTIAL = fi.alekster.classical.db.tables.Credential.CREDENTIAL;
 
     /**
      * The table <code>public.databasechangelog</code>.
@@ -65,7 +76,32 @@ public class Tables {
     public static final PerformanceGenre PERFORMANCE_GENRE = fi.alekster.classical.db.tables.PerformanceGenre.PERFORMANCE_GENRE;
 
     /**
+     * The table <code>public.user</code>.
+     */
+    public static final User USER = fi.alekster.classical.db.tables.User.USER;
+
+    /**
      * The table <code>public.venue</code>.
      */
     public static final Venue VENUE = fi.alekster.classical.db.tables.Venue.VENUE;
+
+    /**
+     * The table <code>public.watchdog</code>.
+     */
+    public static final Watchdog WATCHDOG = fi.alekster.classical.db.tables.Watchdog.WATCHDOG;
+
+    /**
+     * The table <code>public.watchdog_author</code>.
+     */
+    public static final WatchdogAuthor WATCHDOG_AUTHOR = fi.alekster.classical.db.tables.WatchdogAuthor.WATCHDOG_AUTHOR;
+
+    /**
+     * The table <code>public.watchdog_genre</code>.
+     */
+    public static final WatchdogGenre WATCHDOG_GENRE = fi.alekster.classical.db.tables.WatchdogGenre.WATCHDOG_GENRE;
+
+    /**
+     * The table <code>public.watchdog_venue</code>.
+     */
+    public static final WatchdogVenue WATCHDOG_VENUE = fi.alekster.classical.db.tables.WatchdogVenue.WATCHDOG_VENUE;
 }
