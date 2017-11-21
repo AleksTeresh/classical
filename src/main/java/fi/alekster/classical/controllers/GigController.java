@@ -127,6 +127,7 @@ public class GigController {
 
         Timestamp timestamp;
         try {
+            System.out.println(input.getTimestamp());
             DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(input.getTimestamp());
             timestamp = Timestamp.valueOf(dateTime.toString("yyyy-MM-dd HH:mm:ss"));
         } catch (Exception ex) {
@@ -143,23 +144,27 @@ public class GigController {
             }
         }
 
-        List<Author> authors = authorDao.findAll();
-        List<String> authorNames = authors.stream()
-                .map(p -> p.getName())
+        input.getPerformances()
+                .stream()
+                .forEach(p -> {
+                    List<String> authorNames = authorDao.findAll().stream()
+                            .map(s -> s.getName())
+                            .collect(Collectors.toList());
+                    ExtractedResult result = FuzzySearch.extractOne(p.getAuthor(), authorNames);
+                    if (result.getScore() < 75) {
+                        Author newAuthor = constructAuthor(p.getAuthor());
+                        authorDao.insert(newAuthor);
+                    }
+                });
+
+        List<String> authorNames = authorDao.findAll().stream()
+                .map(s -> s.getName())
                 .collect(Collectors.toList());
         List<Performance> performances = input.getPerformances()
                 .stream()
                 .map(p -> {
                     ExtractedResult result = FuzzySearch.extractOne(p.getAuthor(), authorNames);
-                    Long authorId;
-                    if (result.getScore() >= 75) {
-                        authorId = authorDao.fetchByName(result.getString()).stream().findFirst().get().getId();
-                    } else {
-                        Author newAuthor = constructAuthor(p.getAuthor());
-                        authorDao.insert(newAuthor);
-
-                        authorId = newAuthor.getId();
-                    }
+                    Long authorId = authorDao.fetchByName(result.getString()).stream().findFirst().get().getId();
 
                     return constructPerformances(
                             p,

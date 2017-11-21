@@ -103,10 +103,12 @@ public class WatchdogController {
                 watchdogDao.fetchOneById(id).getEmail(),
                 userUtils.getAuthenticatedCredential(httpServletRequest).getEmail()
         )) {
+            watchdogAuthorDao.deleteByWatchdogId(id);
+            watchdogVenueDao.deleteByWatchdogId(id);
+            watchdogGenreDao.deleteByWatchdogId(id);
             watchdogDao.deleteById(id);
-            watchdogAuthorDao.delete(watchdogAuthorDao.fetchByWatchdogId(id));
-            watchdogVenueDao.delete(watchdogVenueDao.fetchByWatchdogId(id));
-            watchdogGenreDao.delete(watchdogGenreDao.fetchByWatchdogId(id));
+
+            return ResponseEntity.ok().build();
         }
 
         throw new NotAuthorizedException("Unauthorized: this watchdog does not belong to you");

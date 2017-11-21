@@ -1,5 +1,6 @@
 package fi.alekster.classical.dao;
 
+import fi.alekster.classical.db.Tables;
 import fi.alekster.classical.db.tables.daos.WatchdogGenreDao;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class ExWatchdogGenreDao extends WatchdogGenreDao {
+    private final DSLContext dsl;
 
     @Autowired
     public ExWatchdogGenreDao(DSLContext dsl) {
         super(dsl.configuration());
+
+        this.dsl = dsl;
+    }
+
+    public void deleteByWatchdogId (Long id) {
+        dsl.deleteFrom(Tables.WATCHDOG_GENRE)
+                .where(Tables.WATCHDOG_GENRE.WATCHDOG_ID.equal(id))
+                .execute();
     }
 }

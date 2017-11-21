@@ -50,6 +50,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 logger.error("an error occured during getting username from token", e);
             } catch (ExpiredJwtException e) {
                 logger.warn("the token is expired and not valid anymore", e);
+            } catch (Exception ex) {
+                logger.error(ex);
             }
         } else {
             logger.warn("couldn't find bearer string, will ignore the header");
@@ -65,16 +67,20 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
             // For simple validation it is completely sufficient to just check the token integrity. You don't have to call
             // the database compellingly. Again it's up to you ;)
-            if (jwtTokenUtil.validateToken(authToken)) {
-                // String username = jwtTokenUtil.getUsernameFromToken(authToken);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        userDetails.getPassword(),
-                        userDetails.getAuthorities()
-                );
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                logger.info("authenticated user " + username + ", setting security context");
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                if (jwtTokenUtil.validateToken(authToken)) {
+                    // String username = jwtTokenUtil.getUsernameFromToken(authToken);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            userDetails.getPassword(),
+                            userDetails.getAuthorities()
+                    );
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    logger.info("authenticated user " + username + ", setting security context");
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (Exception ex) {
+                logger.error(ex);
             }
         }
 
