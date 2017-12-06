@@ -32,6 +32,35 @@ public class WikiFetcherTest {
     }
 
     @Test
+    public void fetchFirstSentenceTest() {
+        String fetchedSentence = fetcher.fetchFirstSentence("Vakula the Smith");
+
+        Assert.assertEquals(
+                "Vakula the Smith (Russian: Кузнец Вакула, Kuznets Vakula, Smith Vakula), Op. 14, is an opera in 3 acts, 8 scenes, by Pyotr Ilyich Tchaikovsky.",
+                fetchedSentence
+        );
+    }
+
+    @Test
+    public void firstSentenceMultiTryTest () {
+        String opus = "Vakula the Smith";
+        String author = "Pyotr Tchaikovsky";
+
+        String firstSentence = fetcher.fetchFirstSentence(opus + " " + author);
+        if (firstSentence == null || firstSentence == "") {
+            firstSentence = fetcher.fetchFirstSentence(author + " " + opus);
+        }
+        if (firstSentence == null || firstSentence == "") {
+            firstSentence = fetcher.fetchFirstSentence(opus);
+        }
+
+        Assert.assertEquals(
+                "Vakula the Smith (Russian: Кузнец Вакула, Kuznets Vakula, Smith Vakula), Op. 14, is an opera in 3 acts, 8 scenes, by Pyotr Ilyich Tchaikovsky.",
+                firstSentence
+        );
+    }
+
+    @Test
     public void fetchDescriptionWithNonAsciiCharsTest() {
         String fetchedDescription = fetcher.fetchDescription("Seinäjoki");
 

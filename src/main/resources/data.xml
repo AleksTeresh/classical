@@ -10,71 +10,163 @@
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="1" />
-            <column name="name" value="Classical concert" />
+            <column name="name" value="Waltz" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="2" />
-            <column name="name" value="Opera" />
+            <column name="name" value="Suite" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="3" />
-            <column name="name" value="Ballet" />
+            <column name="name" value="Symphony" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="4" />
-            <column name="name" value="Jazz" />
+            <column name="name" value="Sonata" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="5" />
-            <column name="name" value="Contemporary" />
+            <column name="name" value="Scherzo" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="6" />
-            <column name="name" value="Contemporary" />
+            <column name="name" value="Rhapsody" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="7" />
-            <column name="name" value="Folk" />
+            <column name="name" value="Requiem" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="8" />
-            <column name="name" value="Musical" />
+            <column name="name" value="Quintet" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="9" />
-            <column name="name" value="Pop" />
+            <column name="name" value="Quartet" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="10" />
-            <column name="name" value="Rock" />
+            <column name="name" value="Prelude" />
         </insert>
         <insert
                 schemaName="public"
                 tableName="genre">
             <column name="id" value="11" />
-            <column name="name" value="Blues" />
+            <column name="name" value="Polonaise" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="12" />
+            <column name="name" value="Serenade" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="13" />
+            <column name="name" value="Opera" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="14" />
+            <column name="name" value="Nocturne" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="15" />
+            <column name="name" value="March" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="16" />
+            <column name="name" value="Mazurka" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="17" />
+            <column name="name" value="Impromptu" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="18" />
+            <column name="name" value="Etude" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="19" />
+            <column name="name" value="Dance" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="20" />
+            <column name="name" value="Concerto" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="21" />
+            <column name="name" value="Caprice" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="22" />
+            <column name="name" value="Ballet" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="23" />
+            <column name="name" value="Ballade" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="24" />
+            <column name="name" value="Overture" />
+        </insert>
+        <insert
+                schemaName="public"
+                tableName="genre">
+            <column name="id" value="25" />
+            <column name="name" value="Other" />
         </insert>
     </changeSet>
 
     <changeSet id="2-data" author="Aleksandr Tereshchenko">
+        <insert
+                schemaName="public"
+                tableName="author">
+            <column name="id" value="1" />
+            <column name="name" value="Sergei Rachmaninoff" />
+            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Sergei_Rachmaninoff" />
+        </insert>
+
         <insert
                 schemaName="public"
                 tableName="credential">
@@ -102,145 +194,6 @@
             <column name="id" value="3" />
             <column name="name" value="Spb Philarmony" />
             <column name="description" value="St. Petersburg philarmony by Dmitri Shostakovich" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="gig">
-            <column name="id" value="1" />
-            <column name="venue_id" value="1" />
-            <column name="name" value="Rachmaninoff best works" />
-            <column name="description" value="Piano Concert No. 2 and Rhapsody on the theme of Paganini" />
-            <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
-            <column name="duration" value="7200" />
-            <column name="url" value="classical.dynu.net" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="gig">
-            <column name="id" value="2" />
-            <column name="venue_id" value="1" />
-            <column name="name" value="Rachmaninoff 2nd best works" />
-            <column name="description" value="Piano Concert No. 3 and 4" />
-            <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
-            <column name="duration" value="7200" />
-            <column name="url" value="classical.dynu.net" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="gig">
-            <column name="id" value="3" />
-            <column name="venue_id" value="2" />
-            <column name="name" value="Some actual name here" />
-            <column name="description" value="Some proper description here" />
-            <column name="timestamp" value="2017-12-12T19:00:00.000Z" />
-            <column name="duration" value="7200" />
-            <column name="url" value="classical.dynu.net" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="author">
-            <column name="id" value="1" />
-            <column name="name" value="Sergei Rachmaninoff" />
-            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Sergei_Rachmaninoff" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="author">
-            <column name="id" value="2" />
-            <column name="name" value="Pyotr Ilyich Tchaikovsky" />
-            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Pyotr_Ilyich_Tchaikovsky" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="author">
-            <column name="id" value="3" />
-            <column name="name" value="Franz Liszt" />
-            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Franz_Liszt" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="performance">
-            <column name="id" value="1" />
-            <column name="author_id" value="1" />
-            <column name="gig_id" value="1" />
-            <column name="youtube_id" value="yJpJ8REjvqo" />
-            <column name="name" value="2nd Concetro for piano and orchestra" />
-            <column name="description" value="Some sensible description follows here" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance">
-            <column name="id" value="2" />
-            <column name="author_id" value="1" />
-            <column name="gig_id" value="1" />
-            <column name="youtube_id" value="2lha9QArvqw" />
-            <column name="name" value="Rhapsody on the theme of Paganini" />
-            <column name="description" value="Some sensible description follows her" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance">
-            <column name="id" value="3" />
-            <column name="author_id" value="1" />
-            <column name="gig_id" value="2" />
-            <column name="youtube_id" value="MOOfoW5_2iE" />
-            <column name="name" value="3rd Concerto for piano and orchestra" />
-            <column name="description" value="Some sensible description follows here" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance">
-            <column name="id" value="4" />
-            <column name="author_id" value="1" />
-            <column name="gig_id" value="2" />
-            <column name="youtube_id" value="jmdkTsjFI-s" />
-            <column name="name" value="4th Concerto for piano and orchestra" />
-            <column name="description" value="Some sensible description follows here" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance">
-            <column name="id" value="5" />
-            <column name="author_id" value="2" />
-            <column name="gig_id" value="3" />
-            <column name="youtube_id" value="Yue6Cb5OULM" />
-            <column name="name" value="1st Concetro for piano and orchestra" />
-            <column name="description" value="Some sensible description follows here" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="performance_genre">
-            <column name="performance_id" value="1" />
-            <column name="genre_id" value="1" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance_genre">
-            <column name="performance_id" value="2" />
-            <column name="genre_id" value="1" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance_genre">
-            <column name="performance_id" value="3" />
-            <column name="genre_id" value="1" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance_genre">
-            <column name="performance_id" value="4" />
-            <column name="genre_id" value="1" />
-        </insert>
-        <insert
-                schemaName="public"
-                tableName="performance_genre">
-            <column name="performance_id" value="5" />
-            <column name="genre_id" value="1" />
         </insert>
     </changeSet>
 </databaseChangeLog>

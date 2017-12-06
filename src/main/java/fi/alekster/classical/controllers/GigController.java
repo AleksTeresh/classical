@@ -2,6 +2,7 @@ package fi.alekster.classical.controllers;
 
 import fi.alekster.classical.dao.*;
 import fi.alekster.classical.db.tables.pojos.Author;
+import fi.alekster.classical.db.tables.pojos.Genre;
 import fi.alekster.classical.db.tables.pojos.Gig;
 import fi.alekster.classical.db.tables.pojos.Performance;
 import fi.alekster.classical.email.EmailHandler;
@@ -20,9 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -157,7 +156,8 @@ public class GigController {
                     }
                 });
 
-        List<String> authorNames = authorDao.findAll().stream()
+        List<Author> authors = authorDao.findAll();
+        List<String> authorNames = authors.stream()
                 .map(s -> s.getName())
                 .collect(Collectors.toList());
         List<Performance> performances = input.getPerformances()
@@ -187,16 +187,69 @@ public class GigController {
                 Timestamp.valueOf(new DateTime().toString("yyyy-MM-dd HH:mm:ss"))
         );
         gigDao.insert(newGig);
+
+        List<Genre> genres = genreDao.findAll();
+        List<String> genreNames = genres
+                .stream()
+                .map(p -> p.getName())
+                .collect(Collectors.toList());
         performances.stream()
             .forEach(p -> {
                 p.setGigId(newGig.getId());
                 p.setId(performanceDao.count() + 1);
 
-                // TODO: get genre by searching the internet
-                performanceDao.insert(p, 1L);
+                // List<Genre> matchGenres = new ArrayList<>();
+                Optional<Genre> matchGenre = Optional.empty();
+                int maxPartialRation = -1;
+
+                for (Genre genre : genres) {
+                    try {
+                        int partialRatio = FuzzySearch.partialRatio(genre.getName(), p.getName());
+
+                        if (partialRatio >= 75 && (!matchGenre.isPresent() || maxPartialRation < partialRatio)) {
+                            matchGenre = Optional.of(genre);
+                            maxPartialRation = partialRatio;
+                        }
+                    } catch (Exception ex) {}
+                }
+
+                if (!matchGenre.isPresent()) {
+                    // TODO: add error handling here
+                    String authorName = authors.stream()
+                            .filter(a -> a.getId() == p.getAuthorId())
+                            .findFirst().get().getName();
+
+                    String firstSentence = wikiFetcher.fetchFirstSentence(p.getName() + " " + authorName);
+                    if (firstSentence == null || firstSentence == "") {
+                        firstSentence = wikiFetcher.fetchFirstSentence(authorName + " " + p.getName());
+                    }
+                    if (firstSentence == null || firstSentence == "") {
+                        firstSentence = wikiFetcher.fetchFirstSentence(p.getName());
+                    }
+
+                    if (firstSentence != null && firstSentence != "") {
+                        for (Genre genre : genres) {
+                            try {
+                                int partialRatio = FuzzySearch.partialRatio(genre.getName(), firstSentence);
+
+                                if (partialRatio >= 75 && (!matchGenre.isPresent() || maxPartialRation < partialRatio)) {
+                                    matchGenre = Optional.of(genre);
+                                    maxPartialRation = partialRatio;
+                                }
+                            } catch (Exception ex) {}
+                        }
+                    }
+                }
+
+                if (matchGenre.isPresent()) {
+                    performanceDao.insert(p, matchGenre.get().getId());
+                } else {
+                    Genre otherGenre = genres.stream()
+                            .filter(s -> Objects.equals(s.getName(), "Other"))
+                            .findFirst().get();
+                    performanceDao.insert(p, otherGenre.getId());
+                }
             });
-
-
 
         return getGig(newGig.getId());
     }

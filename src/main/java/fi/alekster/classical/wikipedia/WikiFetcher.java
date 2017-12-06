@@ -38,32 +38,36 @@ public class WikiFetcher {
         return url;
     }
 
-    public String fetchDescription(String keyPhrase) {
+    public String fetchFirstSentence (String keyPhrase) {
+        /*
+        String title = getWikiTitle(keyPhrase);
+        if (title == "") {
+            return "";
+        }  */
+
         Object[] openSearchResult = getOpenSearchResult(keyPhrase);
-
-        String title = "";
-
-        if (openSearchResult.length >= 2) {
+        if (openSearchResult.length >= 3) {
             try {
-                title = ((List<String>) openSearchResult[1]).get(0);
+                return ((List<String>) openSearchResult[2]).get(0);
             } catch (Exception ex) {
+                System.out.println(keyPhrase);
+                System.out.println(openSearchResult.length);
                 ex.printStackTrace();
                 return "";
             }
         } else {
             return "";
         }
-/*
-        String encodedTitle;
-        try {
-            encodedTitle = URLEncoder.encode(title, "UTF-8");
-            System.out.println("Encoded title " + encodedTitle);
-        } catch (UnsupportedEncodingException ex) {
+    }
+
+    public String fetchDescription(String keyPhrase) {
+        String title = getWikiTitle(keyPhrase);
+        if (title == "") {
             return "";
         }
-*/
+
         QueryResult queryResult = restTemplate.getForObject(
-                "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=" +
+                "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&redirects&titles=" +
                         title,
                 QueryResult.class
         );
@@ -76,6 +80,27 @@ public class WikiFetcher {
         return queryResult.getQuery().getPages().values().iterator().next().getExtract();
     }
 
+    private String getWikiTitle (String keyPhrase) {
+        Object[] openSearchResult = getOpenSearchResult(keyPhrase);
+
+        String title = "";
+
+        if (openSearchResult.length >= 2) {
+            try {
+                title = ((List<String>) openSearchResult[1]).get(0);
+            } catch (Exception ex) {
+                System.out.println(keyPhrase);
+                System.out.println(openSearchResult.length);
+                ex.printStackTrace();
+                return "";
+            }
+        } else {
+            return "";
+        }
+
+        return title;
+    }
+
     private Object[] getOpenSearchResult(String keyPhrase) {
         /*
         String encodedKeyPhrase;
@@ -86,7 +111,7 @@ public class WikiFetcher {
         }
 */
         Object[] openSearchResult = restTemplate.getForObject(
-                "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&format=json&search=" + keyPhrase,
+                "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&redirects=resolve&format=json&search=" + keyPhrase,
                 Object[].class
         );
 

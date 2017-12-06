@@ -117,8 +117,14 @@ public class ExGigDao extends GigDao {
             Date createDate
     ) {
         Condition condition = Tables.GIG.NAME.contains(keyPhrase)
-                .or(Tables.GIG.DESCRIPTION.contains(keyPhrase));
-        // TODO: add conditions for searching the keyPhrase in names and descriptions of the associated performances
+                .or(Tables.GIG.DESCRIPTION.contains(keyPhrase))
+                .or(Tables.GIG.ID.in(
+                        dsl.select(Tables.PERFORMANCE.ID).from(Tables.PERFORMANCE)
+                            .where(Tables.PERFORMANCE.NAME.contains(keyPhrase).or(Tables.PERFORMANCE.AUTHOR_ID.in(
+                                    dsl.select(Tables.AUTHOR.ID).from(Tables.AUTHOR).where(Tables.AUTHOR.NAME.contains(keyPhrase))
+                            )))
+                ));
+        // TODO: make the search fuzzy instead of strict one
         if (authorIds != null) {
             condition = condition.and(Tables.GIG.ID.in(
                     dsl.select(Tables.PERFORMANCE.GIG_ID)
