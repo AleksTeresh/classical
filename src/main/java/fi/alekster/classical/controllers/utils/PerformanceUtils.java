@@ -40,25 +40,25 @@ public class PerformanceUtils {
                 .map(p -> p.getName())
                 .collect(Collectors.toList());
         ExtractedResult result = FuzzySearch.extractOne(performanceRequest.getAuthor(), authorNames);
-        Long authorId = authors.stream()
+        Author relatedAuthor = authors.stream()
                 .filter(p -> Objects.equals(p.getName(), result.getString()))
-                .findFirst().get().getId();
+                .findFirst().get();
 
         return constructPerformances(
                 performanceRequest,
                 0L,
                 youtubeSearcher.getYoutubeId(
-                        performanceRequest.getAuthor() + " " + performanceRequest.getName()
+                        relatedAuthor.getName() + " " + performanceRequest.getName()
                 ),
-                getOpusWikipediaUrl(performanceRequest),
-                authorId
+                getOpusWikipediaUrl(performanceRequest.getName(), relatedAuthor.getName()),
+                relatedAuthor.getId()
         );
     }
 
-    private String getOpusWikipediaUrl (PerformanceRequest performanceRequest) {
+    private String getOpusWikipediaUrl (String opusName, String author) {
         String url = commonUtils.getRelatedTextForPerformance(
-                performanceRequest.getName(),
-                performanceRequest.getAuthor(),
+                opusName,
+                author,
                 wikiFetcher::fetchUrl
         );
 

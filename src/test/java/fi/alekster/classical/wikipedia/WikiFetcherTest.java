@@ -17,10 +17,17 @@ public class WikiFetcherTest {
     }
 
     @Test
-    public void fetchUrlTest() {
+    public void fetchAuthorUrlTest() {
         String fetchedUrl = fetcher.fetchUrl("Uuno Klami");
 
         Assert.assertEquals("https://en.wikipedia.org/wiki/Uuno_Klami", fetchedUrl);
+    }
+
+    @Test
+    public void fetchOpusUrlTest() {
+        String fetchedUrl = fetcher.fetchUrl("Études-Tableaux Rachmaninoff");
+
+        Assert.assertEquals("https://en.wikipedia.org/wiki/%C3%89tudes-Tableaux,_Op._33", fetchedUrl);
     }
 
     @Test
