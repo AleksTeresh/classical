@@ -23,14 +23,14 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Gig implements Serializable {
 
-    private static final long serialVersionUID = 1326718817;
+    private static final long serialVersionUID = 113926323;
 
     private Long      id;
     private Long      venueId;
     private String    name;
     private String    description;
     private Timestamp timestamp;
-    private Integer   duration;
+    private Long      duration;
     private String    imageUrl;
     private String    url;
     private Timestamp createTime;
@@ -55,7 +55,7 @@ public class Gig implements Serializable {
         String    name,
         String    description,
         Timestamp timestamp,
-        Integer   duration,
+        Long      duration,
         String    imageUrl,
         String    url,
         Timestamp createTime
@@ -111,11 +111,11 @@ public class Gig implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Integer getDuration() {
+    public Long getDuration() {
         return this.duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 

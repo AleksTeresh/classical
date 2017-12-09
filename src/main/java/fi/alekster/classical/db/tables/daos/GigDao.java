@@ -96,7 +96,7 @@ public class GigDao extends DAOImpl<GigRecord, fi.alekster.classical.db.tables.p
     /**
      * Fetch records that have <code>duration IN (values)</code>
      */
-    public List<fi.alekster.classical.db.tables.pojos.Gig> fetchByDuration(Integer... values) {
+    public List<fi.alekster.classical.db.tables.pojos.Gig> fetchByDuration(Long... values) {
         return fetch(Gig.GIG.DURATION, values);
     }
 

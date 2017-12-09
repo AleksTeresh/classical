@@ -1,21 +1,18 @@
 package fi.alekster.classical.controllers;
 
+import fi.alekster.classical.controllers.utils.*;
 import fi.alekster.classical.dao.*;
 import fi.alekster.classical.db.tables.pojos.Author;
 import fi.alekster.classical.db.tables.pojos.Genre;
 import fi.alekster.classical.db.tables.pojos.Gig;
 import fi.alekster.classical.db.tables.pojos.Performance;
-import fi.alekster.classical.email.EmailHandler;
 import fi.alekster.classical.representations.*;
 import fi.alekster.classical.representations.requests.GigRequest;
 import fi.alekster.classical.representations.requests.PerformanceRequest;
 import fi.alekster.classical.representations.responses.GigResponse;
-import fi.alekster.classical.wikipedia.WikiFetcher;
-import fi.alekster.classical.youtube.YoutubeSearcher;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
 import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +34,11 @@ public class GigController {
     private final ExGenreDao genreDao;
     private final ExVenueDao venueDao;
 
-    private final YoutubeSearcher youtubeSearcher;
-    private final WikiFetcher wikiFetcher;
-    private final EmailHandler emailHandler;
+    private final CommonUtils commonUtils;
+    private final PerformanceUtils performanceUtils;
+    private final AuthorUtils authorUtils;
+    private final GenreUtils genreUtils;
+    private final DurationUtils durationUtils;
 
     @Autowired
     public GigController(
@@ -48,9 +47,11 @@ public class GigController {
             ExAuthorDao authorDao,
             ExGenreDao genreDao,
             ExVenueDao venueDao,
-            YoutubeSearcher youtubeSearcher,
-            WikiFetcher wikiFetcher,
-            EmailHandler emailHandler
+            CommonUtils commonUtils,
+            PerformanceUtils performanceUtils,
+            AuthorUtils authorUtils,
+            GenreUtils genreUtils,
+            DurationUtils durationUtils
     ) {
         System.out.println("Constructor has been called");
         this.gigDao = gigDao;
@@ -59,9 +60,11 @@ public class GigController {
         this.genreDao = genreDao;
         this.venueDao = venueDao;
 
-        this.youtubeSearcher = youtubeSearcher;
-        this.wikiFetcher = wikiFetcher;
-        this.emailHandler = emailHandler;
+        this.commonUtils = commonUtils;
+        this.performanceUtils = performanceUtils;
+        this.authorUtils = authorUtils;
+        this.genreUtils = genreUtils;
+        this.durationUtils = durationUtils;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -123,16 +126,9 @@ public class GigController {
 
     @RequestMapping(method = RequestMethod.POST)
     public GigView createGig(@RequestBody GigRequest input) {
+        Timestamp timestamp = commonUtils.stringToTimestamp(input.getTimestamp());
 
-        Timestamp timestamp;
-        try {
-            System.out.println(input.getTimestamp());
-            DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(input.getTimestamp());
-            timestamp = Timestamp.valueOf(dateTime.toString("yyyy-MM-dd HH:mm:ss"));
-        } catch (Exception ex) {
-            timestamp = Timestamp.valueOf("1970-01-01 02:00:00");
-        }
-
+        // check if the gig already exists, and if so, return the existing gig
         if (gigDao.exists(input.getName(), timestamp, input.getVenue())) {
             Optional<Gig> existingGig = gigDao.fetchByTimestamp(timestamp)
                     .stream()
@@ -143,18 +139,8 @@ public class GigController {
             }
         }
 
-        input.getPerformances()
-                .stream()
-                .forEach(p -> {
-                    List<String> authorNames = authorDao.findAll().stream()
-                            .map(s -> s.getName())
-                            .collect(Collectors.toList());
-                    ExtractedResult result = FuzzySearch.extractOne(p.getAuthor(), authorNames);
-                    if (result.getScore() < 75) {
-                        Author newAuthor = constructAuthor(p.getAuthor());
-                        authorDao.insert(newAuthor);
-                    }
-                });
+        // create authors that are featured in the gig, but do not exist in the DB yet
+        createMissingAuthors(input.getPerformances());
 
         List<Author> authors = authorDao.findAll();
         List<String> authorNames = authors.stream()
@@ -162,118 +148,63 @@ public class GigController {
                 .collect(Collectors.toList());
         List<Performance> performances = input.getPerformances()
                 .stream()
-                .map(p -> {
-                    ExtractedResult result = FuzzySearch.extractOne(p.getAuthor(), authorNames);
-                    Long authorId = authorDao.fetchByName(result.getString()).stream().findFirst().get().getId();
-
-                    return constructPerformances(
-                            p,
-                            0L,
-                            youtubeSearcher.getYoutubeId(p.getAuthor() + " " +p.getName()),
-                            authorId
-                    );
-                })
+                .map(p -> performanceUtils.requestToPerformance(p, authors))
                 .collect(Collectors.toList());
 
         Gig newGig = new Gig(
                 gigDao.count() + 1,
                 input.getVenue(),
                 input.getName(),
-                input.getDescription(),
+                // if the venue is Mariinsky, change all the links to direct to mariinky website
+                input.getVenue() == 2
+                ? input.getDescription().replaceAll("a href=\"", "a href=\"https://www.mariinsky.ru")
+                : input.getDescription(),
                 timestamp,
-                0,
+                durationUtils.stringToMilliseconds(input.getDuration()),
                 input.getImageUrl(),
                 input.getUrl(),
                 Timestamp.valueOf(new DateTime().toString("yyyy-MM-dd HH:mm:ss"))
         );
         gigDao.insert(newGig);
 
-        List<Genre> genres = genreDao.findAll();
-        List<String> genreNames = genres
-                .stream()
-                .map(p -> p.getName())
-                .collect(Collectors.toList());
-        performances.stream()
-            .forEach(p -> {
-                p.setGigId(newGig.getId());
-                p.setId(performanceDao.count() + 1);
-
-                // List<Genre> matchGenres = new ArrayList<>();
-                Optional<Genre> matchGenre = Optional.empty();
-                int maxPartialRation = -1;
-
-                for (Genre genre : genres) {
-                    try {
-                        int partialRatio = FuzzySearch.partialRatio(genre.getName(), p.getName());
-
-                        if (partialRatio >= 75 && (!matchGenre.isPresent() || maxPartialRation < partialRatio)) {
-                            matchGenre = Optional.of(genre);
-                            maxPartialRation = partialRatio;
-                        }
-                    } catch (Exception ex) {}
-                }
-
-                if (!matchGenre.isPresent()) {
-                    // TODO: add error handling here
-                    String authorName = authors.stream()
-                            .filter(a -> a.getId() == p.getAuthorId())
-                            .findFirst().get().getName();
-
-                    String firstSentence = wikiFetcher.fetchFirstSentence(p.getName() + " " + authorName);
-                    if (firstSentence == null || firstSentence == "") {
-                        firstSentence = wikiFetcher.fetchFirstSentence(authorName + " " + p.getName());
-                    }
-                    if (firstSentence == null || firstSentence == "") {
-                        firstSentence = wikiFetcher.fetchFirstSentence(p.getName());
-                    }
-
-                    if (firstSentence != null && firstSentence != "") {
-                        for (Genre genre : genres) {
-                            try {
-                                int partialRatio = FuzzySearch.partialRatio(genre.getName(), firstSentence);
-
-                                if (partialRatio >= 75 && (!matchGenre.isPresent() || maxPartialRation < partialRatio)) {
-                                    matchGenre = Optional.of(genre);
-                                    maxPartialRation = partialRatio;
-                                }
-                            } catch (Exception ex) {}
-                        }
-                    }
-                }
-
-                if (matchGenre.isPresent()) {
-                    performanceDao.insert(p, matchGenre.get().getId());
-                } else {
-                    Genre otherGenre = genres.stream()
-                            .filter(s -> Objects.equals(s.getName(), "Other"))
-                            .findFirst().get();
-                    performanceDao.insert(p, otherGenre.getId());
-                }
-            });
+        insertNewPerformances(performances, authors, newGig);
 
         return getGig(newGig.getId());
     }
 
-    private Author constructAuthor(String name) {
-        return new Author(
-                authorDao.count() + 1,
-                name,
-                wikiFetcher.fetchDescription(name),
-                wikiFetcher.fetchUrl(name),
-                "" // TODO: use wikiFetcher to get an actual image
-        );
+    private void insertNewPerformances (List<Performance> performances, List<Author> authors, Gig newlyCreatedGig) {
+        List<Genre> genres = genreDao.findAll();
+        performances.stream()
+                .forEach(p -> {
+                    p.setGigId(newlyCreatedGig.getId());
+                    p.setId(performanceDao.count() + 1);
+
+                    Optional<Genre> matchGenre = genreUtils.getMatchingGenre(p, genres, authors);
+
+                    if (matchGenre.isPresent()) {
+                        performanceDao.insert(p, matchGenre.get().getId());
+                    } else { // if no genre was defined, set the genre to be Others and persist the performance
+                        Genre otherGenre = genres.stream()
+                                .filter(s -> Objects.equals(s.getName(), "Other"))
+                                .findFirst().get();
+                        performanceDao.insert(p, otherGenre.getId());
+                    }
+                });
     }
 
-    private Performance constructPerformances(PerformanceRequest perfReqs, Long gigId, String youTubeId, Long authorId) {
-        return new Performance(
-                0L,
-                authorId, // authorId
-                gigId, // gigId
-                perfReqs.getName(),
-                "", // description
-                "", // conductor
-                "", // players
-                youTubeId
-        );
+    private void createMissingAuthors (List<PerformanceRequest> performances) {
+        performances
+                .stream()
+                .forEach(p -> {
+                    List<String> authorNames = authorDao.findAll().stream()
+                            .map(s -> s.getName())
+                            .collect(Collectors.toList());
+                    ExtractedResult result = FuzzySearch.extractOne(p.getAuthor(), authorNames);
+                    if (result.getScore() < 75) {
+                        Author newAuthor = authorUtils.constructAuthor(p.getAuthor(), authorDao.count() + 1);
+                        authorDao.insert(newAuthor);
+                    }
+                });
     }
+
 }

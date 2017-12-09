@@ -61,7 +61,7 @@
             <column name="timestamp" type="datetime" >
                 <constraints nullable="true" />
             </column>
-            <column name="duration" type="integer" >
+            <column name="duration" type="bigint" >
                 <constraints nullable="true" />
             </column>
             <column name="image_url" type="varchar(511)" >

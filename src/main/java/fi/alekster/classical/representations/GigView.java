@@ -22,7 +22,7 @@ public class GigView {
     private Long timestamp;
 
     @JsonProperty
-    private int duration;
+    private Long duration;
 
     @JsonProperty
     private List<PerformanceView> performances;
@@ -43,7 +43,7 @@ public class GigView {
             String name,
             String description,
             Long timestamp,
-            int duration,
+            Long duration,
             List<PerformanceView> performances,
             VenueView venue,
             String imageUrl,
@@ -66,7 +66,7 @@ public class GigView {
                 gig.getName(),
                 gig.getDescription(),
                 gig.getTimestamp().getTime() / 1000,
-                gig.getDuration(),
+                gig.getDuration() / 1000,
                 performances,
                 venue,
                 gig.getImageUrl(),

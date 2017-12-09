@@ -19,11 +19,15 @@ public class UserUtils {
     @Value("${jwt.header}")
     private String tokenHeader;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    public UserUtils (JwtTokenUtil jwtTokenUtil, UserDetailsService userDetailsService) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     public Credential getAuthenticatedCredential(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader).substring(7);

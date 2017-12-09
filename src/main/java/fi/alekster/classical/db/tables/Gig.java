@@ -37,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Gig extends TableImpl<GigRecord> {
 
-    private static final long serialVersionUID = 789374404;
+    private static final long serialVersionUID = 957877475;
 
     /**
      * The reference instance of <code>public.gig</code>
@@ -80,7 +80,7 @@ public class Gig extends TableImpl<GigRecord> {
     /**
      * The column <code>public.gig.duration</code>.
      */
-    public final TableField<GigRecord, Integer> DURATION = createField("duration", org.jooq.impl.SQLDataType.INTEGER, this, "");
+    public final TableField<GigRecord, Long> DURATION = createField("duration", org.jooq.impl.SQLDataType.BIGINT, this, "");
 
     /**
      * The column <code>public.gig.image_url</code>.
