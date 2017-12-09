@@ -18,10 +18,12 @@ import java.util.Optional;
 public class GenreUtils {
 
     private final WikiFetcher wikiFetcher;
+    private final CommonUtils commonUtils;
 
     @Autowired
-    public GenreUtils(WikiFetcher wikiFetcher) {
+    public GenreUtils(WikiFetcher wikiFetcher, CommonUtils commonUtils) {
         this.wikiFetcher = wikiFetcher;
+        this.commonUtils = commonUtils;
     }
 
     public Optional<Genre> getMatchingGenre (Performance performance, List<Genre> genres, List<Author> authors) {
@@ -69,13 +71,11 @@ public class GenreUtils {
                 .filter(a -> a.getId() == performance.getAuthorId())
                 .findFirst().get().getName();
 
-        String firstSentence = wikiFetcher.fetchFirstSentence(performance.getName() + " " + authorName);
-        if (firstSentence == null || firstSentence == "") {
-            firstSentence = wikiFetcher.fetchFirstSentence(authorName + " " + performance.getName());
-        }
-        if (firstSentence == null || firstSentence == "") {
-            firstSentence = wikiFetcher.fetchFirstSentence(performance.getName());
-        }
+        String firstSentence = commonUtils.getRelatedTextForPerformance(
+                performance.getName(),
+                authorName,
+                wikiFetcher::fetchFirstSentence
+        );
 
         if (firstSentence != null && firstSentence != "") {
             for (Genre genre : genres) {

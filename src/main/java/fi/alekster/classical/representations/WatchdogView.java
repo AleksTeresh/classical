@@ -81,8 +81,14 @@ public class WatchdogView {
     }
 
     public static WatchdogView fromEntity (Watchdog watchdog, List<Long> authorIds, List<Long> venueIds, List<Long> genreIds) {
-        String startDateString = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(watchdog.getStartDate());
-        String endDateString = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(watchdog.getEndDate());
+        String startDateString = watchdog.getStartDate() == null
+        ? null
+        : new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+                .format(watchdog.getStartDate());
+        String endDateString = watchdog.getEndDate() == null
+        ? null
+        : new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+                .format(watchdog.getEndDate());
 
         return new WatchdogView(
                 watchdog.getId(),

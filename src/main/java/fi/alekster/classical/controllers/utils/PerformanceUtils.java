@@ -3,6 +3,7 @@ package fi.alekster.classical.controllers.utils;
 import fi.alekster.classical.db.tables.pojos.Author;
 import fi.alekster.classical.db.tables.pojos.Performance;
 import fi.alekster.classical.representations.requests.PerformanceRequest;
+import fi.alekster.classical.wikipedia.WikiFetcher;
 import fi.alekster.classical.youtube.YoutubeSearcher;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
@@ -19,10 +20,18 @@ import java.util.stream.Collectors;
 @Component
 public class PerformanceUtils {
     private final YoutubeSearcher youtubeSearcher;
+    private final WikiFetcher wikiFetcher;
+    private final CommonUtils commonUtils;
 
     @Autowired
-    public PerformanceUtils (YoutubeSearcher youtubeSearcher) {
+    public PerformanceUtils (
+            YoutubeSearcher youtubeSearcher,
+            WikiFetcher wikiFetcher,
+            CommonUtils commonUtils
+    ) {
         this.youtubeSearcher = youtubeSearcher;
+        this.wikiFetcher = wikiFetcher;
+        this.commonUtils = commonUtils;
     }
 
     public Performance requestToPerformance (PerformanceRequest performanceRequest, List<Author> authors) {
@@ -38,12 +47,31 @@ public class PerformanceUtils {
         return constructPerformances(
                 performanceRequest,
                 0L,
-                youtubeSearcher.getYoutubeId(performanceRequest.getAuthor() + " " + performanceRequest.getName()),
+                youtubeSearcher.getYoutubeId(
+                        performanceRequest.getAuthor() + " " + performanceRequest.getName()
+                ),
+                getOpusWikipediaUrl(performanceRequest),
                 authorId
         );
     }
 
-    private Performance constructPerformances(PerformanceRequest perfReqs, Long gigId, String youTubeId, Long authorId) {
+    private String getOpusWikipediaUrl (PerformanceRequest performanceRequest) {
+        String url = commonUtils.getRelatedTextForPerformance(
+                performanceRequest.getName(),
+                performanceRequest.getAuthor(),
+                wikiFetcher::fetchUrl
+        );
+
+        return url;
+    }
+
+    private Performance constructPerformances(
+            PerformanceRequest perfReqs,
+            Long gigId,
+            String youTubeId,
+            String wikipediaLink,
+            Long authorId
+    ) {
         return new Performance(
                 0L,
                 authorId, // authorId
@@ -52,7 +80,8 @@ public class PerformanceUtils {
                 "", // description
                 "", // conductor
                 "", // players
-                youTubeId
+                youTubeId,
+                wikipediaLink
         );
     }
 }

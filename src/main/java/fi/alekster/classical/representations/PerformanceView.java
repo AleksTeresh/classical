@@ -33,6 +33,9 @@ public class PerformanceView {
     @JsonProperty
     private String youtubeId;
 
+    @JsonProperty
+    private String wikipediaLink;
+
     public PerformanceView () {}
 
     public PerformanceView(
@@ -43,7 +46,8 @@ public class PerformanceView {
             List<GenreView> genres,
             String conductor,
             String players,
-            String youtubeId
+            String youtubeId,
+            String wikipediaLink
     ) {
         this.id = id;
         this.name = name;
@@ -53,6 +57,7 @@ public class PerformanceView {
         this.conductor = conductor;
         this.players = players;
         this.youtubeId = youtubeId;
+        this.wikipediaLink = wikipediaLink;
     }
 
     public static PerformanceView fromEntity(Performance performance, AuthorView author, List<GenreView> genres) {
@@ -64,7 +69,8 @@ public class PerformanceView {
                 genres,
                 performance.getConductor(),
                 performance.getPlayers(),
-                performance.getYoutubeId()
+                performance.getYoutubeId(),
+                performance.getWikipediaLink()
         );
     }
 }

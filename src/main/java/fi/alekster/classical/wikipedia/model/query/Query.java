@@ -1,4 +1,4 @@
-package fi.alekster.classical.wikipedia.model;
+package fi.alekster.classical.wikipedia.model.query;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -12,10 +12,6 @@ import java.util.Map;
 public class Query {
 
     private Map<Long, Page> pages;
-
-    public Query() {
-
-    }
 
     public Map<Long, Page> getPages() {
         return this.pages;

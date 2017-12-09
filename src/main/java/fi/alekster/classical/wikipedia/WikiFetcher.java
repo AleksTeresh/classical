@@ -1,7 +1,9 @@
 package fi.alekster.classical.wikipedia;
 
 import com.google.gson.Gson;
-import fi.alekster.classical.wikipedia.model.QueryResult;
+import fi.alekster.classical.wikipedia.model.query.QueryResult;
+import fi.alekster.classical.wikipedia.model.specialSearch.SearchEntry;
+import fi.alekster.classical.wikipedia.model.specialSearch.SpecialSearchResult;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,7 +21,8 @@ public class WikiFetcher {
     }
 
     public String fetchUrl(String keyPhrase) {
-        Object[] openSearchResult = getOpenSearchResult(keyPhrase);
+        String fullTitle = getFullTitle(keyPhrase);
+        Object[] openSearchResult = getOpenSearchResult(fullTitle);
 
         String url = "";
 
@@ -39,13 +42,9 @@ public class WikiFetcher {
     }
 
     public String fetchFirstSentence (String keyPhrase) {
-        /*
-        String title = getWikiTitle(keyPhrase);
-        if (title == "") {
-            return "";
-        }  */
+        String fullTitle = getFullTitle(keyPhrase);
 
-        Object[] openSearchResult = getOpenSearchResult(keyPhrase);
+        Object[] openSearchResult = getOpenSearchResult(fullTitle);
         if (openSearchResult.length >= 3) {
             try {
                 return ((List<String>) openSearchResult[2]).get(0);
@@ -61,7 +60,7 @@ public class WikiFetcher {
     }
 
     public String fetchDescription(String keyPhrase) {
-        String title = getWikiTitle(keyPhrase);
+        String title = getFullTitle(keyPhrase);
         if (title == "") {
             return "";
         }
@@ -79,7 +78,7 @@ public class WikiFetcher {
         // TODO: add error handling here
         return queryResult.getQuery().getPages().values().iterator().next().getExtract();
     }
-
+/*
     private String getWikiTitle (String keyPhrase) {
         Object[] openSearchResult = getOpenSearchResult(keyPhrase);
 
@@ -99,6 +98,26 @@ public class WikiFetcher {
         }
 
         return title;
+    }
+*/
+    private String getFullTitle (String keyPhrase) {
+        if (keyPhrase == "" || keyPhrase == null) {
+            return "";
+        }
+
+        SpecialSearchResult specialSearchResult = restTemplate.getForObject(
+                "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=" +
+                        keyPhrase,
+                SpecialSearchResult.class
+        );
+
+        List<SearchEntry> searchEntries = specialSearchResult.getQuery().getSearch();
+
+        if (searchEntries.isEmpty()) {
+            return "";
+        } else {
+            return searchEntries.get(0).getTitle();
+        }
     }
 
     private Object[] getOpenSearchResult(String keyPhrase) {

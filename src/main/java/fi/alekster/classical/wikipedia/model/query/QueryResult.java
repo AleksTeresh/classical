@@ -1,4 +1,4 @@
-package fi.alekster.classical.wikipedia.model;
+package fi.alekster.classical.wikipedia.model.query;
 
 /**
  * Created by aleksandr on 9.11.2017.
@@ -7,12 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class QueryResult {
-    public String batchcomplete;
-    public Query query;
-
-    public QueryResult() {
-
-    }
+    private String batchcomplete;
+    private Query query;
 
     public Query getQuery() {
         return query;

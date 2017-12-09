@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Performance extends TableImpl<PerformanceRecord> {
 
-    private static final long serialVersionUID = 766299401;
+    private static final long serialVersionUID = -533098899;
 
     /**
      * The reference instance of <code>public.performance</code>
@@ -90,6 +90,11 @@ public class Performance extends TableImpl<PerformanceRecord> {
      * The column <code>public.performance.youtube_id</code>.
      */
     public final TableField<PerformanceRecord, String> YOUTUBE_ID = createField("youtube_id", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
+
+    /**
+     * The column <code>public.performance.wikipedia_link</code>.
+     */
+    public final TableField<PerformanceRecord, String> WIKIPEDIA_LINK = createField("wikipedia_link", org.jooq.impl.SQLDataType.VARCHAR.length(400), this, "");
 
     /**
      * Create a <code>public.performance</code> table reference

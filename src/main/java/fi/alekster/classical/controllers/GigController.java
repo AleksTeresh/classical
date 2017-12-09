@@ -78,9 +78,10 @@ public class GigController {
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern="yyyy-MM-dd") Date endDate
     ) {
+        /*
         if (startDate == null) {
             startDate = new Date();
-        }
+        } */
         Long count = gigDao.count(keyPhrase, authorIds, genreIds, venueIds, startDate, endDate);
         List<GigView> gigs = gigDao.fetch(keyPhrase, limit, offset, authorIds, genreIds, venueIds, startDate, endDate)
                 .stream()

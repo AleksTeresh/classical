@@ -112,4 +112,11 @@ public class PerformanceDao extends DAOImpl<PerformanceRecord, fi.alekster.class
     public List<fi.alekster.classical.db.tables.pojos.Performance> fetchByYoutubeId(String... values) {
         return fetch(Performance.PERFORMANCE.YOUTUBE_ID, values);
     }
+
+    /**
+     * Fetch records that have <code>wikipedia_link IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Performance> fetchByWikipediaLink(String... values) {
+        return fetch(Performance.PERFORMANCE.WIKIPEDIA_LINK, values);
+    }
 }

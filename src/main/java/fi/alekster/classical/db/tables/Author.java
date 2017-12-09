@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Author extends TableImpl<AuthorRecord> {
 
-    private static final long serialVersionUID = -612982580;
+    private static final long serialVersionUID = 1007980267;
 
     /**
      * The reference instance of <code>public.author</code>
@@ -68,7 +68,7 @@ public class Author extends TableImpl<AuthorRecord> {
     /**
      * The column <code>public.author.wikipedia_link</code>.
      */
-    public final TableField<AuthorRecord, String> WIKIPEDIA_LINK = createField("wikipedia_link", org.jooq.impl.SQLDataType.VARCHAR.length(300), this, "");
+    public final TableField<AuthorRecord, String> WIKIPEDIA_LINK = createField("wikipedia_link", org.jooq.impl.SQLDataType.VARCHAR.length(400), this, "");
 
     /**
      * The column <code>public.author.image_url</code>.

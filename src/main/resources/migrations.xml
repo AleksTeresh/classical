@@ -85,7 +85,7 @@
             <column name="description" type="clob">
                 <constraints nullable="true" />
             </column>
-            <column name="wikipedia_link" type="varchar(300)">
+            <column name="wikipedia_link" type="varchar(400)">
                 <constraints nullable="true" />
             </column>
             <column name="image_url" type="varchar(511)" >
@@ -116,6 +116,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="youtube_id" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="wikipedia_link" type="varchar(400)">
                 <constraints nullable="true" />
             </column>
         </createTable>

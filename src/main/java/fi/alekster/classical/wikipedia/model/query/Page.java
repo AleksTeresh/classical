@@ -1,4 +1,4 @@
-package fi.alekster.classical.wikipedia.model;
+package fi.alekster.classical.wikipedia.model.query;
 
 /**
  * Created by aleksandr on 9.11.2017.
@@ -11,10 +11,6 @@ public class Page {
     private int ns;
     private String title;
     private String extract;
-
-    public Page() {
-
-    }
 
     public Long getPageid() {
         return pageid;

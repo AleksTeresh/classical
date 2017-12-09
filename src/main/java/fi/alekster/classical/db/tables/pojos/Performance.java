@@ -22,7 +22,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Performance implements Serializable {
 
-    private static final long serialVersionUID = 396730802;
+    private static final long serialVersionUID = -1901633033;
 
     private Long   id;
     private Long   authorId;
@@ -32,6 +32,7 @@ public class Performance implements Serializable {
     private String conductor;
     private String players;
     private String youtubeId;
+    private String wikipediaLink;
 
     public Performance() {}
 
@@ -44,6 +45,7 @@ public class Performance implements Serializable {
         this.conductor = value.conductor;
         this.players = value.players;
         this.youtubeId = value.youtubeId;
+        this.wikipediaLink = value.wikipediaLink;
     }
 
     public Performance(
@@ -54,7 +56,8 @@ public class Performance implements Serializable {
         String description,
         String conductor,
         String players,
-        String youtubeId
+        String youtubeId,
+        String wikipediaLink
     ) {
         this.id = id;
         this.authorId = authorId;
@@ -64,6 +67,7 @@ public class Performance implements Serializable {
         this.conductor = conductor;
         this.players = players;
         this.youtubeId = youtubeId;
+        this.wikipediaLink = wikipediaLink;
     }
 
     public Long getId() {
@@ -130,6 +134,14 @@ public class Performance implements Serializable {
         this.youtubeId = youtubeId;
     }
 
+    public String getWikipediaLink() {
+        return this.wikipediaLink;
+    }
+
+    public void setWikipediaLink(String wikipediaLink) {
+        this.wikipediaLink = wikipediaLink;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Performance (");
@@ -142,6 +154,7 @@ public class Performance implements Serializable {
         sb.append(", ").append(conductor);
         sb.append(", ").append(players);
         sb.append(", ").append(youtubeId);
+        sb.append(", ").append(wikipediaLink);
 
         sb.append(")");
         return sb.toString();

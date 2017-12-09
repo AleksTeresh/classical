@@ -1,5 +1,6 @@
 package fi.alekster.classical.wikipedia;
 
+import fi.alekster.classical.controllers.utils.CommonUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,9 +9,11 @@ import org.junit.Test;
  */
 public class WikiFetcherTest {
     private final WikiFetcher fetcher;
+    private final CommonUtils commonUtils;
 
     public WikiFetcherTest() {
         fetcher = new WikiFetcher();
+        commonUtils = new CommonUtils();
     }
 
     @Test
@@ -46,17 +49,11 @@ public class WikiFetcherTest {
         String opus = "Vakula the Smith";
         String author = "Pyotr Tchaikovsky";
 
-        String firstSentence = fetcher.fetchFirstSentence(opus + " " + author);
-        if (firstSentence == null || firstSentence == "") {
-            firstSentence = fetcher.fetchFirstSentence(author + " " + opus);
-        }
-        if (firstSentence == null || firstSentence == "") {
-            firstSentence = fetcher.fetchFirstSentence(opus);
-        }
+        String finalResult = commonUtils.getRelatedTextForPerformance(opus, author, fetcher::fetchFirstSentence);
 
         Assert.assertEquals(
                 "Vakula the Smith (Russian: Кузнец Вакула, Kuznets Vakula, Smith Vakula), Op. 14, is an opera in 3 acts, 8 scenes, by Pyotr Ilyich Tchaikovsky.",
-                firstSentence
+                finalResult
         );
     }
 
