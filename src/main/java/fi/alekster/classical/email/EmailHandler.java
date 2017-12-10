@@ -124,18 +124,19 @@ public class EmailHandler {
                     .p("Takes place on " + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
                             .format(gigs.get(i).getTimestamp()))
                     .p("The venue is " + venueName)
-                    .h3("The program is")
-                    .table();
+                    .h3("The program is");
 
             for (int j = 0; j < performances.size(); j++) {
                 builder = builder
-                        .row(
-                                authorDao.fetchOneById(performances.get(j).getAuthorId()).getName(),
-                                performances.get(j).getName()
-                        );
+                        .strong(
+                                authorDao.fetchOneById(performances.get(j).getAuthorId()).getName()
+                        )
+                        .text(
+                                " - " + performances.get(j).getName()
+                        ).br();
             }
 
-            builder = builder.end();
+            // builder = builder.end();
         }
 
         return builder.build();

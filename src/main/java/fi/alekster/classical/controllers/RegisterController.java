@@ -1,11 +1,15 @@
 package fi.alekster.classical.controllers;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import fi.alekster.classical.dao.ExCredentialDao;
 import fi.alekster.classical.dao.ExUserDao;
 import fi.alekster.classical.db.tables.pojos.Credential;
 import fi.alekster.classical.db.tables.pojos.User;
 import fi.alekster.classical.representations.requests.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,6 +50,10 @@ public class RegisterController {
             return ResponseEntity.ok().build();
         }
 
-        return ResponseEntity.badRequest().build();
+        JsonObject response = new JsonObject();
+        JsonElement message = new JsonPrimitive("A user with the provided email already exists.");
+        response.add("message", message);
+
+        return new ResponseEntity<String>(response.toString(), HttpStatus.BAD_REQUEST);
     }
 }
