@@ -1,5 +1,8 @@
 package fi.alekster.classical.controllers;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import fi.alekster.classical.controllers.utils.UserUtils;
 import fi.alekster.classical.dao.ExWatchdogAuthorDao;
 import fi.alekster.classical.dao.ExWatchdogDao;
@@ -11,6 +14,7 @@ import fi.alekster.classical.representations.requests.CreateWatchdogRequest;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,6 +72,24 @@ public class WatchdogController {
             }
         }
 
+        // if the watchdog already exists, return an error message about it
+        if (watchdogDao.exists(
+                userUtils.getAuthenticatedCredential(httpServletRequest).getEmail(),
+                request.getKeyPhrase(),
+                request.getAuthorIds(),
+                request.getGenreIds(),
+                request.getVenueIds(),
+                request.isAllGenres(),
+                request.isAllAuthors(),
+                startTimestamp,
+                endTimestamp
+        )) {
+            JsonObject response = new JsonObject();
+            JsonElement message = new JsonPrimitive("The exact same watchdog already exists!");
+            response.add("message", message);
+
+            return new ResponseEntity<String>(response.toString(), HttpStatus.BAD_REQUEST);
+        }
 
         if (request.getEndDate() != null) {
             try {
