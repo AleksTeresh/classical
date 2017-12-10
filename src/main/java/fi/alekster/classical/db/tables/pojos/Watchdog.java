@@ -23,13 +23,15 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Watchdog implements Serializable {
 
-    private static final long serialVersionUID = -549210317;
+    private static final long serialVersionUID = 949115283;
 
     private Long      id;
     private String    email;
     private Timestamp startDate;
     private Timestamp endDate;
     private String    keyPhrase;
+    private Boolean   allGenres;
+    private Boolean   allAuthors;
 
     public Watchdog() {}
 
@@ -39,6 +41,8 @@ public class Watchdog implements Serializable {
         this.startDate = value.startDate;
         this.endDate = value.endDate;
         this.keyPhrase = value.keyPhrase;
+        this.allGenres = value.allGenres;
+        this.allAuthors = value.allAuthors;
     }
 
     public Watchdog(
@@ -46,13 +50,17 @@ public class Watchdog implements Serializable {
         String    email,
         Timestamp startDate,
         Timestamp endDate,
-        String    keyPhrase
+        String    keyPhrase,
+        Boolean   allGenres,
+        Boolean   allAuthors
     ) {
         this.id = id;
         this.email = email;
         this.startDate = startDate;
         this.endDate = endDate;
         this.keyPhrase = keyPhrase;
+        this.allGenres = allGenres;
+        this.allAuthors = allAuthors;
     }
 
     public Long getId() {
@@ -95,6 +103,22 @@ public class Watchdog implements Serializable {
         this.keyPhrase = keyPhrase;
     }
 
+    public Boolean getAllGenres() {
+        return this.allGenres;
+    }
+
+    public void setAllGenres(Boolean allGenres) {
+        this.allGenres = allGenres;
+    }
+
+    public Boolean getAllAuthors() {
+        return this.allAuthors;
+    }
+
+    public void setAllAuthors(Boolean allAuthors) {
+        this.allAuthors = allAuthors;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Watchdog (");
@@ -104,6 +128,8 @@ public class Watchdog implements Serializable {
         sb.append(", ").append(startDate);
         sb.append(", ").append(endDate);
         sb.append(", ").append(keyPhrase);
+        sb.append(", ").append(allGenres);
+        sb.append(", ").append(allAuthors);
 
         sb.append(")");
         return sb.toString();

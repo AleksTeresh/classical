@@ -163,8 +163,29 @@
                 schemaName="public"
                 tableName="author">
             <column name="id" value="1" />
+            <column name="name" value="No author" />
+        </insert>
+
+        <insert
+                schemaName="public"
+                tableName="author">
+            <column name="id" value="2" />
             <column name="name" value="Sergei Rachmaninoff" />
             <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Sergei_Rachmaninoff" />
+        </insert>
+
+        <insert
+                schemaName="public"
+                tableName="credential">
+            <column name="email" value="terap98@icloud.com" />
+            <column name="password" value="$2a$09$qQ5Oju2e.7HJva3EgQws7.SEciXjAEpPbbyPCrwf1Ks26QpnVmr6O" />
+        </insert>
+
+        <insert
+                schemaName="public"
+                tableName="user">
+            <column name="email" value="terap98@icloud.com" />
+            <column name="name" value="Aleksandr" />
         </insert>
 
         <insert

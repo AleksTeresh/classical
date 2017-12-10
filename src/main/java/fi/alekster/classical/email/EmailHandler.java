@@ -59,6 +59,7 @@ public class EmailHandler {
         this.performanceDao = performanceDao;
     }
 
+    // TODO: change to run only once a week
     @Scheduled(cron = "0 * * * * *")
     public void sendNewGigNotification() {
         System.out.println("Scheduling works");
@@ -66,7 +67,9 @@ public class EmailHandler {
                 .stream()
                 .forEach(p -> {
                     System.out.println("Found a watchdog");
-                    List<Long> authorIds = watchdogAuthorDao.fetchByWatchdogId(p.getId())
+                    List<Long> authorIds = p.getAllAuthors()
+                    ? null
+                    : watchdogAuthorDao.fetchByWatchdogId(p.getId())
                             .stream()
                             .map(s -> s.getAuthorId())
                             .collect(Collectors.toList());
@@ -74,7 +77,9 @@ public class EmailHandler {
                             .stream()
                             .map(s -> s.getVenueId())
                             .collect(Collectors.toList());
-                    List<Long> genreIds = watchdogGenreDao.fetchByWatchdogId(p.getId())
+                    List<Long> genreIds = p.getAllGenres()
+                    ? null
+                    : watchdogGenreDao.fetchByWatchdogId(p.getId())
                             .stream()
                             .map(s -> s.getGenreId())
                             .collect(Collectors.toList());

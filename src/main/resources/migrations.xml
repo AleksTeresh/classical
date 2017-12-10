@@ -148,6 +148,12 @@
             <column name="key_phrase" type="varchar(511)">
                 <constraints nullable="true" />
             </column>
+            <column name="all_genres" type="boolean" >
+                <constraints nullable="false" />
+            </column>
+            <column name="all_authors" type="boolean" >
+                <constraints nullable="false" />
+            </column>
         </createTable>
 
         <createTable tableName="watchdog_author">

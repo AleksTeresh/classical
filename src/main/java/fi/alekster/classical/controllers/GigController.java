@@ -197,6 +197,10 @@ public class GigController {
         performances
                 .stream()
                 .forEach(p -> {
+                    if (p.getAuthor() == null || Objects.equals(p.getAuthor(), "")) {
+                        return;
+                    }
+
                     List<String> authorNames = authorDao.findAll().stream()
                             .map(s -> s.getName())
                             .collect(Collectors.toList());

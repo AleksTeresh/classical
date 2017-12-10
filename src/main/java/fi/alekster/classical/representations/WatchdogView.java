@@ -1,4 +1,4 @@
-package fi.alekster.classical.representations.requests;
+package fi.alekster.classical.representations;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fi.alekster.classical.db.tables.pojos.Watchdog;
@@ -32,6 +32,12 @@ public class WatchdogView {
     @JsonProperty
     private List<Long> genreIds;
 
+    @JsonProperty
+    private boolean allGenres;
+
+    @JsonProperty
+    private boolean allAuthors;
+
     public WatchdogView() {}
 
     public WatchdogView(
@@ -41,7 +47,9 @@ public class WatchdogView {
             String keyPhrase,
             List<Long> authorIds,
             List<Long> venueIds,
-            List<Long> genreIds
+            List<Long> genreIds,
+            boolean allGenres,
+            boolean allAuthors
     ) {
         this.id = id;
         this.startDate = startDate;
@@ -50,6 +58,8 @@ public class WatchdogView {
         this.authorIds = authorIds;
         this.venueIds = venueIds;
         this.genreIds = genreIds;
+        this.allGenres = allGenres;
+        this.allAuthors = allAuthors;
     }
 
     public Long getId () {
@@ -80,6 +90,10 @@ public class WatchdogView {
         return this.venueIds;
     }
 
+    public boolean isAllGenres() { return allGenres; }
+
+    public boolean isAllAuthors() { return allAuthors; }
+
     public static WatchdogView fromEntity (Watchdog watchdog, List<Long> authorIds, List<Long> venueIds, List<Long> genreIds) {
         String startDateString = watchdog.getStartDate() == null
         ? null
@@ -97,7 +111,9 @@ public class WatchdogView {
                 watchdog.getKeyPhrase(),
                 authorIds,
                 venueIds,
-                genreIds
+                genreIds,
+                watchdog.getAllGenres(),
+                watchdog.getAllAuthors()
         );
     }
 }

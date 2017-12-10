@@ -6,8 +6,8 @@ import fi.alekster.classical.dao.ExWatchdogDao;
 import fi.alekster.classical.dao.ExWatchdogGenreDao;
 import fi.alekster.classical.dao.ExWatchdogVenueDao;
 import fi.alekster.classical.db.tables.pojos.Watchdog;
+import fi.alekster.classical.representations.WatchdogView;
 import fi.alekster.classical.representations.requests.CreateWatchdogRequest;
-import fi.alekster.classical.representations.requests.WatchdogView;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +84,9 @@ public class WatchdogController {
                         userUtils.getAuthenticatedCredential(httpServletRequest).getEmail(),
                         startTimestamp,
                         endTimestamp,
-                        request.getKeyPhrase()
+                        request.getKeyPhrase(),
+                        request.isAllGenres(),
+                        request.isAllAuthors()
                 ),
                 request.getAuthorIds(),
                 request.getGenreIds(),

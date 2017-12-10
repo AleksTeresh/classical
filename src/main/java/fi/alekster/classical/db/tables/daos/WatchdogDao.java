@@ -92,4 +92,18 @@ public class WatchdogDao extends DAOImpl<WatchdogRecord, fi.alekster.classical.d
     public List<fi.alekster.classical.db.tables.pojos.Watchdog> fetchByKeyPhrase(String... values) {
         return fetch(Watchdog.WATCHDOG.KEY_PHRASE, values);
     }
+
+    /**
+     * Fetch records that have <code>all_genres IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Watchdog> fetchByAllGenres(Boolean... values) {
+        return fetch(Watchdog.WATCHDOG.ALL_GENRES, values);
+    }
+
+    /**
+     * Fetch records that have <code>all_authors IN (values)</code>
+     */
+    public List<fi.alekster.classical.db.tables.pojos.Watchdog> fetchByAllAuthors(Boolean... values) {
+        return fetch(Watchdog.WATCHDOG.ALL_AUTHORS, values);
+    }
 }

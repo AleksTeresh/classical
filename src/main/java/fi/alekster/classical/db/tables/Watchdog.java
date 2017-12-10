@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Watchdog extends TableImpl<WatchdogRecord> {
 
-    private static final long serialVersionUID = 1677793869;
+    private static final long serialVersionUID = -336659751;
 
     /**
      * The reference instance of <code>public.watchdog</code>
@@ -75,6 +75,16 @@ public class Watchdog extends TableImpl<WatchdogRecord> {
      * The column <code>public.watchdog.key_phrase</code>.
      */
     public final TableField<WatchdogRecord, String> KEY_PHRASE = createField("key_phrase", org.jooq.impl.SQLDataType.VARCHAR.length(511), this, "");
+
+    /**
+     * The column <code>public.watchdog.all_genres</code>.
+     */
+    public final TableField<WatchdogRecord, Boolean> ALL_GENRES = createField("all_genres", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>public.watchdog.all_authors</code>.
+     */
+    public final TableField<WatchdogRecord, Boolean> ALL_AUTHORS = createField("all_authors", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
 
     /**
      * Create a <code>public.watchdog</code> table reference
