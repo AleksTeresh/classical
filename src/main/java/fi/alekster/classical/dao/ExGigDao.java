@@ -119,7 +119,7 @@ public class ExGigDao extends GigDao {
         Condition condition = Tables.GIG.NAME.contains(keyPhrase)
                 .or(Tables.GIG.DESCRIPTION.contains(keyPhrase))
                 .or(Tables.GIG.ID.in(
-                        dsl.select(Tables.PERFORMANCE.ID).from(Tables.PERFORMANCE)
+                        dsl.select(Tables.PERFORMANCE.GIG_ID).from(Tables.PERFORMANCE)
                             .where(Tables.PERFORMANCE.NAME.contains(keyPhrase).or(Tables.PERFORMANCE.AUTHOR_ID.in(
                                     dsl.select(Tables.AUTHOR.ID).from(Tables.AUTHOR).where(Tables.AUTHOR.NAME.contains(keyPhrase))
                             )))
