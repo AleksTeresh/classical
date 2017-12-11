@@ -3,7 +3,11 @@ package fi.alekster.classical.dao;
 import fi.alekster.classical.db.Tables;
 import fi.alekster.classical.db.tables.daos.GigDao;
 import fi.alekster.classical.db.tables.pojos.Gig;
-import org.jooq.*;
+import org.joda.time.DateTime;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.SelectSeekStep1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -124,7 +128,7 @@ public class ExGigDao extends GigDao {
                                     dsl.select(Tables.AUTHOR.ID).from(Tables.AUTHOR).where(Tables.AUTHOR.NAME.contains(keyPhrase))
                             )))
                 ));
-        // TODO: make the search fuzzy instead of strict one
+
         if (authorIds != null) {
             condition = condition.and(Tables.GIG.ID.in(
                     dsl.select(Tables.PERFORMANCE.GIG_ID)
@@ -150,7 +154,10 @@ public class ExGigDao extends GigDao {
             condition = condition.and(Tables.GIG.TIMESTAMP.greaterOrEqual(new Timestamp(startDate.getTime())));
         }
         if (endDate != null) {
-            condition = condition.and(Tables.GIG.TIMESTAMP.lessOrEqual(new Timestamp(endDate.getTime())));
+            DateTime endJodaDate = new DateTime(endDate);
+            DateTime nextDayStart = endJodaDate.plusDays( 1 ).withTimeAtStartOfDay();
+
+            condition = condition.and(Tables.GIG.TIMESTAMP.lessOrEqual(new Timestamp(nextDayStart.toDate().getTime())));
         }
 
         if (createDate != null) {

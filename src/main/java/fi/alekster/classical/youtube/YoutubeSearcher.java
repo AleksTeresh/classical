@@ -12,6 +12,8 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
+import me.xdrop.fuzzywuzzy.FuzzySearch;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @Component
 public class YoutubeSearcher {
+    @Value("${youtube.api-key}")
+    private String apiKey;
+
     private YouTube youtube;
 
     public YoutubeSearcher() {
@@ -28,11 +33,15 @@ public class YoutubeSearcher {
         }).setApplicationName("classical").build();
     }
 
+    public void setApiKey (String key) {
+        this.apiKey = key;
+    }
+
     public String getYoutubeId (String keyPhrase) {
         try {
             YouTube.Search.List search = youtube.search().list("id,snippet");
 
-            search.setKey("AIzaSyA5OK9oE6qsmfurNRCwD1buBv8-3tXGDZ0");
+            search.setKey(apiKey);
             search.setQ(keyPhrase);
             search.setType("video");
             search.setFields("items(id/videoId,snippet/title)");
@@ -40,7 +49,7 @@ public class YoutubeSearcher {
 
             SearchListResponse searchResponse = search.execute();
             List<SearchResult> searchResultList = searchResponse.getItems();
-            if (searchResultList != null) {
+            if (searchResultList != null && !searchResultList.isEmpty()) {
                 SearchResult firstVideo = searchResultList.iterator().next();
                 ResourceId rId = firstVideo.getId();
 
@@ -48,8 +57,13 @@ public class YoutubeSearcher {
                     String videoId = rId.getVideoId();
                     String title =  firstVideo.getSnippet().getTitle();
 
-                    // TODO: add a check here that the video title is in fact relevant
-                    return videoId;
+                    // check that the found video is indeed relevant
+                    // otherwise, return an empty string
+                    if (FuzzySearch.tokenSortPartialRatio(keyPhrase, title) >= 50) {
+                        return videoId;
+                    }
+
+                    return "";
                 }
             }
         } catch (GoogleJsonResponseException e) {

@@ -59,10 +59,9 @@ public class EmailHandler {
         this.performanceDao = performanceDao;
     }
 
-    // TODO: change to run only once a week
-    @Scheduled(cron = "0 * * * * *")
+    // run at 7:30 UTC time every Monday
+    @Scheduled(cron = "30 7 * * * 1")
     public void sendNewGigNotification() {
-        System.out.println("Scheduling works");
         watchdogDao.findAll()
                 .stream()
                 .forEach(p -> {

@@ -1,12 +1,13 @@
 package fi.alekster.classical.wikipedia;
 
-import com.google.gson.Gson;
+import fi.alekster.classical.wikipedia.model.query.Page;
 import fi.alekster.classical.wikipedia.model.query.QueryResult;
 import fi.alekster.classical.wikipedia.model.specialSearch.SearchEntry;
 import fi.alekster.classical.wikipedia.model.specialSearch.SpecialSearchResult;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -65,58 +66,46 @@ public class WikiFetcher {
             return "";
         }
 
-        QueryResult queryResult = restTemplate.getForObject(
-                "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&redirects&titles=" +
-                        title,
-                QueryResult.class
-        );
+        try {
+            QueryResult queryResult = restTemplate.getForObject(
+                    "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&redirects&titles=" +
+                            title,
+                    QueryResult.class
+            );
 
-        Gson gson = new Gson();
-        String json = gson.toJson(queryResult);
-        System.out.printf(json);
+            Collection<Page> pages = queryResult.getQuery().getPages().values();
 
-        // TODO: add error handling here
-        return queryResult.getQuery().getPages().values().iterator().next().getExtract();
-    }
-/*
-    private String getWikiTitle (String keyPhrase) {
-        Object[] openSearchResult = getOpenSearchResult(keyPhrase);
-
-        String title = "";
-
-        if (openSearchResult.length >= 2) {
-            try {
-                title = ((List<String>) openSearchResult[1]).get(0);
-            } catch (Exception ex) {
-                System.out.println(keyPhrase);
-                System.out.println(openSearchResult.length);
-                ex.printStackTrace();
-                return "";
+            if (!pages.isEmpty()) {
+                return pages.iterator().next().getExtract();
             }
-        } else {
+        } catch (Exception e) {
             return "";
         }
 
-        return title;
+        return "";
     }
-*/
+
     private String getFullTitle (String keyPhrase) {
         if (keyPhrase == "" || keyPhrase == null) {
             return "";
         }
 
-        SpecialSearchResult specialSearchResult = restTemplate.getForObject(
-                "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=" +
-                        keyPhrase,
-                SpecialSearchResult.class
-        );
+        try {
+            SpecialSearchResult specialSearchResult = restTemplate.getForObject(
+                    "https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&srsearch=" +
+                            keyPhrase,
+                    SpecialSearchResult.class
+            );
 
-        List<SearchEntry> searchEntries = specialSearchResult.getQuery().getSearch();
+            List<SearchEntry> searchEntries = specialSearchResult.getQuery().getSearch();
 
-        if (searchEntries.isEmpty()) {
+            if (searchEntries.isEmpty()) {
+                return "";
+            } else {
+                return searchEntries.get(0).getTitle();
+            }
+        } catch (Exception ex) {
             return "";
-        } else {
-            return searchEntries.get(0).getTitle();
         }
     }
 
@@ -129,11 +118,15 @@ public class WikiFetcher {
             return new Object[0];
         }
 */
-        Object[] openSearchResult = restTemplate.getForObject(
-                "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&redirects=resolve&format=json&search=" + keyPhrase,
-                Object[].class
-        );
+        try {
+            Object[] openSearchResult = restTemplate.getForObject(
+                    "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&redirects=resolve&format=json&search=" + keyPhrase,
+                    Object[].class
+            );
 
-        return openSearchResult;
+            return openSearchResult;
+        } catch (Exception ex) {
+            return new Object[0];
+        }
     }
 }

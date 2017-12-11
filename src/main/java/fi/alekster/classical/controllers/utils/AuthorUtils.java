@@ -24,7 +24,7 @@ public class AuthorUtils {
                 name,
                 wikiFetcher.fetchDescription(name),
                 wikiFetcher.fetchUrl(name),
-                "" // TODO: use wikiFetcher to get an actual image
+                "" // TODO: use wikiFetcher to get an actual image of the author
         );
     }
 }

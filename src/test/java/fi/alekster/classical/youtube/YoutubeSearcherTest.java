@@ -11,6 +11,7 @@ public class YoutubeSearcherTest {
 
     public YoutubeSearcherTest() {
         searcher = new YoutubeSearcher();
+        searcher.setApiKey("AIzaSyA5OK9oE6qsmfurNRCwD1buBv8-3tXGDZ0");
     }
 
     @Test

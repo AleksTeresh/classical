@@ -51,7 +51,7 @@ public class GenreUtils {
         for (Genre genre : genres) {
             try {
                 int partialRatio = FuzzySearch.partialRatio(genre.getName(), performance.getName());
-                // System.out.println(partialRatio + "  " + genre.getName());
+
                 if (partialRatio >= 75 && (!matchGenre.isPresent() || maxPartialRation < partialRatio)) {
                     matchGenre = Optional.of(genre);
                     maxPartialRation = partialRatio;
@@ -66,10 +66,13 @@ public class GenreUtils {
         Optional<Genre> matchGenre = Optional.empty();
         int maxPartialRation = -1;
 
-        // TODO: add error handling here
-        String authorName = authors.stream()
+        Optional<Author> author = authors.stream()
                 .filter(a -> a.getId() == performance.getAuthorId())
-                .findFirst().get().getName();
+                .findFirst();
+        String authorName = "";
+        if (author.isPresent()) {
+            authorName = author.get().getName();
+        }
 
         String firstSentence = commonUtils.getRelatedTextForPerformance(
                 performance.getName(),
@@ -81,7 +84,7 @@ public class GenreUtils {
             for (Genre genre : genres) {
                 try {
                     int partialRatio = FuzzySearch.partialRatio(genre.getName(), firstSentence);
-                    // System.out.println(partialRatio + "  " + genre.getName());
+
                     if (partialRatio >= 75 && (!matchGenre.isPresent() || maxPartialRation < partialRatio)) {
                         matchGenre = Optional.of(genre);
                         maxPartialRation = partialRatio;
