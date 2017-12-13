@@ -9,6 +9,9 @@ import fi.alekster.classical.dao.ExWatchdogDao;
 import fi.alekster.classical.dao.ExWatchdogGenreDao;
 import fi.alekster.classical.dao.ExWatchdogVenueDao;
 import fi.alekster.classical.db.tables.pojos.Watchdog;
+import fi.alekster.classical.db.tables.pojos.WatchdogAuthor;
+import fi.alekster.classical.db.tables.pojos.WatchdogGenre;
+import fi.alekster.classical.db.tables.pojos.WatchdogVenue;
 import fi.alekster.classical.representations.WatchdogView;
 import fi.alekster.classical.representations.requests.CreateWatchdogRequest;
 import org.joda.time.DateTime;
@@ -68,7 +71,15 @@ public class WatchdogController {
                 DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(request.getStartDate());
                 startTimestamp = Timestamp.valueOf(dateTime.toString("yyyy-MM-dd HH:mm:ss"));
             } catch (Exception ex) {
-                startTimestamp = Timestamp.valueOf("1970-01-01 02:00:00");
+                startTimestamp = Timestamp.valueOf("1970-01-01 00:00:00");
+            }
+        }
+        if (request.getEndDate() != null) {
+            try {
+                DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(request.getEndDate());
+                endTimestamp = Timestamp.valueOf(dateTime.toString("yyyy-MM-dd HH:mm:ss"));
+            } catch (Exception ex) {
+                endTimestamp = Timestamp.valueOf("1970-01-01 00:00:00");
             }
         }
 
@@ -146,9 +157,12 @@ public class WatchdogController {
                 .stream()
                 .map(p -> WatchdogView.fromEntity(
                         p,
-                        watchdogAuthorDao.fetchByWatchdogId(p.getId()).stream().map(s -> s.getAuthorId()).collect(Collectors.toList()),
-                        watchdogVenueDao.fetchByWatchdogId(p.getId()).stream().map(s -> s.getVenueId()).collect(Collectors.toList()),
-                        watchdogGenreDao.fetchByWatchdogId(p.getId()).stream().map(s -> s.getGenreId()).collect(Collectors.toList())
+                        watchdogAuthorDao.fetchByWatchdogId(p.getId()).stream().map(WatchdogAuthor::getAuthorId)
+                                .collect(Collectors.toList()),
+                        watchdogVenueDao.fetchByWatchdogId(p.getId()).stream().map(WatchdogVenue::getVenueId)
+                                .collect(Collectors.toList()),
+                        watchdogGenreDao.fetchByWatchdogId(p.getId()).stream().map(WatchdogGenre::getGenreId)
+                                .collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
     }
@@ -163,9 +177,12 @@ public class WatchdogController {
         if (Objects.equals(fetchedWG.getEmail(), userUtils.getAuthenticatedCredential(httpServletRequest).getEmail())) {
             return WatchdogView.fromEntity(
                     fetchedWG,
-                    watchdogAuthorDao.fetchByWatchdogId(fetchedWG.getId()).stream().map(s -> s.getAuthorId()).collect(Collectors.toList()),
-                    watchdogVenueDao.fetchByWatchdogId(fetchedWG.getId()).stream().map(s -> s.getVenueId()).collect(Collectors.toList()),
-                    watchdogGenreDao.fetchByWatchdogId(fetchedWG.getId()).stream().map(s -> s.getGenreId()).collect(Collectors.toList())
+                    watchdogAuthorDao.fetchByWatchdogId(fetchedWG.getId()).stream().map(WatchdogAuthor::getAuthorId)
+                            .collect(Collectors.toList()),
+                    watchdogVenueDao.fetchByWatchdogId(fetchedWG.getId()).stream().map(WatchdogVenue::getVenueId)
+                            .collect(Collectors.toList()),
+                    watchdogGenreDao.fetchByWatchdogId(fetchedWG.getId()).stream().map(WatchdogGenre::getGenreId)
+                            .collect(Collectors.toList())
             );
         }
 

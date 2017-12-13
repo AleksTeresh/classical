@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by aleksandr on 8.11.2017.
@@ -62,7 +63,7 @@ public class WikiFetcher {
 
     public String fetchDescription(String keyPhrase) {
         String title = getFullTitle(keyPhrase);
-        if (title == "") {
+        if (Objects.equals(title, "")) {
             return "";
         }
 
@@ -86,7 +87,7 @@ public class WikiFetcher {
     }
 
     private String getFullTitle (String keyPhrase) {
-        if (keyPhrase == "" || keyPhrase == null) {
+        if (Objects.equals(keyPhrase, "") || keyPhrase == null) {
             return "";
         }
 

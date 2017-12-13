@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -67,7 +68,7 @@ public class GenreUtils {
         int maxPartialRation = -1;
 
         Optional<Author> author = authors.stream()
-                .filter(a -> a.getId() == performance.getAuthorId())
+                .filter(a -> Objects.equals(a.getId(), performance.getAuthorId()))
                 .findFirst();
         String authorName = "";
         if (author.isPresent()) {
@@ -80,7 +81,7 @@ public class GenreUtils {
                 wikiFetcher::fetchFirstSentence
         );
 
-        if (firstSentence != null && firstSentence != "") {
+        if (firstSentence != null && !Objects.equals(firstSentence, "")) {
             for (Genre genre : genres) {
                 try {
                     int partialRatio = FuzzySearch.partialRatio(genre.getName(), firstSentence);

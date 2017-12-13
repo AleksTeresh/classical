@@ -29,4 +29,12 @@ public class GenreView {
                 genre.getName()
         );
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -1,5 +1,6 @@
 package fi.alekster.classical.controllers;
 
+import fi.alekster.classical.controllers.model.GigDetailed;
 import fi.alekster.classical.controllers.utils.*;
 import fi.alekster.classical.dao.*;
 import fi.alekster.classical.db.tables.pojos.Author;
@@ -7,6 +8,7 @@ import fi.alekster.classical.db.tables.pojos.Genre;
 import fi.alekster.classical.db.tables.pojos.Gig;
 import fi.alekster.classical.db.tables.pojos.Performance;
 import fi.alekster.classical.representations.*;
+import fi.alekster.classical.representations.requests.DetailedGigResponse;
 import fi.alekster.classical.representations.requests.GigRequest;
 import fi.alekster.classical.representations.requests.PerformanceRequest;
 import fi.alekster.classical.representations.responses.GigResponse;
@@ -33,7 +35,7 @@ public class GigController {
     private final ExPerformanceDao performanceDao;
     private final ExAuthorDao authorDao;
     private final ExGenreDao genreDao;
-    private final ExVenueDao venueDao;
+    // private final ExVenueDao venueDao;
     private final ExLikeDao likeDao;
 
     private final CommonUtils commonUtils;
@@ -42,6 +44,7 @@ public class GigController {
     private final GenreUtils genreUtils;
     private final DurationUtils durationUtils;
     private final UserUtils userUtils;
+    private final GigUtils gigUtils;
 
     @Autowired
     public GigController(
@@ -49,22 +52,24 @@ public class GigController {
             ExPerformanceDao performanceDao,
             ExAuthorDao authorDao,
             ExGenreDao genreDao,
-            ExVenueDao venueDao,
+            // ExVenueDao venueDao,
             ExLikeDao likeDao,
             CommonUtils commonUtils,
             PerformanceUtils performanceUtils,
             AuthorUtils authorUtils,
             GenreUtils genreUtils,
             DurationUtils durationUtils,
-            UserUtils userUtils
+            UserUtils userUtils,
+            GigUtils gigUtils
     ) {
         System.out.println("Constructor has been called");
         this.gigDao = gigDao;
         this.performanceDao = performanceDao;
         this.authorDao = authorDao;
         this.genreDao = genreDao;
-        this.venueDao = venueDao;
+        // this.venueDao = venueDao;
         this.likeDao = likeDao;
+        this.gigUtils = gigUtils;
 
         this.commonUtils = commonUtils;
         this.performanceUtils = performanceUtils;
@@ -88,49 +93,62 @@ public class GigController {
         Long count = gigDao.count(keyPhrase, authorIds, genreIds, venueIds, startDate, endDate);
         List<GigView> gigs = gigDao.fetch(keyPhrase, limit, offset, authorIds, genreIds, venueIds, startDate, endDate)
                 .stream()
-                .map(p -> GigView.fromEntity(
-                        p,
-                        performanceDao.fetchByGigId(p.getId())
-                                .stream()
-                                .map(s -> PerformanceView.fromEntity(
-                                        s,
-                                        AuthorView.fromEntity(authorDao.fetchOneById(s.getAuthorId())),
-                                        genreDao.fetchByPerformanceId(s.getId())
-                                                .stream()
-                                                .map(GenreView::fromEntity)
-                                                .collect(Collectors.toList())
-                                ))
-                                .collect(Collectors.toList()),
-                        VenueView.fromEntity(venueDao.fetchOneById(p.getVenueId()))
-                )).collect(Collectors.toList());
+                .map(GigView::fromEntity)
+                .collect(Collectors.toList());
 
         return new GigResponse(gigs, count);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public GigView getGig(HttpServletRequest httpServletRequest, @PathVariable("id") Long id) {
+    public DetailedGigResponse getGig(HttpServletRequest httpServletRequest, @PathVariable("id") Long id) {
         String authHeader = httpServletRequest.getHeader("Authorization");
-        String userEmail = (authHeader != null && authHeader != "")
+        String userEmail = (authHeader != null && !Objects.equals(authHeader, ""))
                 ? userUtils.getAuthenticatedCredential(httpServletRequest).getEmail()
                 : "";
 
         Gig fetchedGig = gigDao.fetchOneById(id);
+        GigView gigView = GigView.fromEntity(
+                fetchedGig
+                // VenueView.fromEntity(venueDao.fetchOneById(fetchedGig.getVenueId()))
+        );
 
-        return GigView.fromEntity(
-                fetchedGig,
-                performanceDao.fetchByGigId(id)
-                    .stream()
-                    .map(p -> PerformanceView.fromEntity(
-                            p,
-                            AuthorView.fromEntity(authorDao.fetchOneById(p.getAuthorId())),
-                            genreDao.fetchByPerformanceId(p.getId())
-                                    .stream()
-                                    .map(GenreView::fromEntity)
-                                    .collect(Collectors.toList()),
-                            userEmail != "" && !likeDao.fetchByEmailAndPerformanceId(userEmail, p.getId()).isEmpty()
-                    ))
+        List<PerformanceView> performances = getPerformanceViewsById(id, userEmail);
+
+        Date today = new Date();
+        DateTime yearAhead = new DateTime(today).plusYears(1);
+        List<Gig> suggestions = gigDao.fetch(
+                "",
+                30,
+                0,
+                performances.stream()
+                    .filter(p -> !Objects.equals(p.getAuthor().getName(), "No author") && p.getAuthor().getId() != 1)
+                    .map(p -> p.getAuthor().getId())
                     .collect(Collectors.toList()),
-                VenueView.fromEntity(venueDao.fetchOneById(fetchedGig.getVenueId()))
+                null,
+                null,
+                new Date(),
+                yearAhead.toDate()
+                );
+
+        suggestions = gigUtils.filterSuggestions(fetchedGig, suggestions);
+
+        List<GigDetailed> detailedSuggestions = suggestions.stream()
+                .map(s -> new GigDetailed(
+                        s,
+                        getPerformanceViewsById(s.getId(), userEmail)
+                        )
+                )
+                .collect(Collectors.toList());
+
+        detailedSuggestions = gigUtils.sortSuggestions(new GigDetailed(fetchedGig, performances), detailedSuggestions);
+
+        return new DetailedGigResponse(
+                gigView,
+                performances,
+                detailedSuggestions.subList(0, Math.min(detailedSuggestions.size(), 3))
+                        .stream()
+                        .map(s -> GigView.fromEntity(s.getGig()))
+                        .collect(Collectors.toList())
         );
     }
 
@@ -142,10 +160,10 @@ public class GigController {
         if (gigDao.exists(input.getName(), timestamp, input.getVenue())) {
             Optional<Gig> existingGig = gigDao.fetchByTimestamp(timestamp)
                     .stream()
-                    .filter(p -> p.getName().contains(input.getName()) && p.getVenueId() == input.getVenue())
+                    .filter(p -> p.getName().contains(input.getName()) && Objects.equals(p.getVenueId(), input.getVenue()))
                     .findFirst();
             if (existingGig.isPresent()) {
-                return getGig(httpServletRequest, existingGig.get().getId());
+                return getGigView(existingGig.get().getId());
             }
         }
 
@@ -154,7 +172,7 @@ public class GigController {
 
         List<Author> authors = authorDao.findAll();
         List<String> authorNames = authors.stream()
-                .map(s -> s.getName())
+                .map(Author::getName)
                 .collect(Collectors.toList());
         List<Performance> performances = input.getPerformances()
                 .stream()
@@ -179,13 +197,12 @@ public class GigController {
 
         insertNewPerformances(performances, authors, newGig);
 
-        return getGig(httpServletRequest, newGig.getId());
+        return getGigView(newGig.getId());
     }
 
     private void insertNewPerformances (List<Performance> performances, List<Author> authors, Gig newlyCreatedGig) {
         List<Genre> genres = genreDao.findAll();
-        performances.stream()
-                .forEach(p -> {
+        performances.forEach(p -> {
                     p.setGigId(newlyCreatedGig.getId());
                     p.setId(performanceDao.count() + 1);
 
@@ -202,16 +219,30 @@ public class GigController {
                 });
     }
 
+    private List<PerformanceView> getPerformanceViewsById (Long id, String userEmail) {
+        return performanceDao.fetchByGigId(id)
+                .stream()
+                .map(p -> PerformanceView.fromEntity(
+                        p,
+                        AuthorView.fromEntity(authorDao.fetchOneById(p.getAuthorId())),
+                        genreDao.fetchByPerformanceId(p.getId())
+                                .stream()
+                                .map(GenreView::fromEntity)
+                                .collect(Collectors.toList()),
+                        !Objects.equals(userEmail, "") && !likeDao.fetchByEmailAndPerformanceId(userEmail, p.getId()).isEmpty()
+                ))
+                .collect(Collectors.toList());
+    }
+
     private void createMissingAuthors (List<PerformanceRequest> performances) {
         performances
-                .stream()
                 .forEach(p -> {
                     if (p.getAuthor() == null || Objects.equals(p.getAuthor(), "")) {
                         return;
                     }
 
                     List<String> authorNames = authorDao.findAll().stream()
-                            .map(s -> s.getName())
+                            .map(Author::getName)
                             .collect(Collectors.toList());
                     ExtractedResult result = FuzzySearch.extractOne(p.getAuthor(), authorNames);
                     if (result.getScore() < 75) {
@@ -221,4 +252,12 @@ public class GigController {
                 });
     }
 
+    private GigView getGigView (Long id) {
+        Gig fetchedGig = gigDao.fetchOneById(id);
+
+        return GigView.fromEntity(
+                fetchedGig
+                // VenueView.fromEntity(venueDao.fetchOneById(fetchedGig.getVenueId()))
+        );
+    }
 }

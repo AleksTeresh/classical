@@ -45,7 +45,7 @@ public class LikeController {
         if (existingLikes.isEmpty()) {
             likeDao.insert(new Like(likeDao.count() + 1, userEmail, request.getPerformanceId()));
         } else {
-            existingLikes.forEach(p -> likeDao.delete(p));
+            existingLikes.forEach(likeDao::delete);
         }
 
         return ResponseEntity.ok().build();

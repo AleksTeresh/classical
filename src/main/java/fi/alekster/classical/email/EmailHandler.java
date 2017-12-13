@@ -63,7 +63,6 @@ public class EmailHandler {
     @Scheduled(cron = "30 7 * * * 1")
     public void sendNewGigNotification() {
         watchdogDao.findAll()
-                .stream()
                 .forEach(p -> {
                     System.out.println("Found a watchdog");
                     List<Long> authorIds = p.getAllAuthors()
@@ -126,18 +125,17 @@ public class EmailHandler {
 
             if (performances != null && !performances.isEmpty()) {
                 builder = builder.h3("The program is");
-            }
 
-            for (int j = 0; j < performances.size(); j++) {
-                builder = builder
-                        .strong(
-                                authorDao.fetchOneById(performances.get(j).getAuthorId()).getName()
-                        )
-                        .text(
-                                " - " + performances.get(j).getName()
-                        ).br();
+                for (int j = 0; j < performances.size(); j++) {
+                    builder = builder
+                            .strong(
+                                    authorDao.fetchOneById(performances.get(j).getAuthorId()).getName()
+                            )
+                            .text(
+                                    " - " + performances.get(j).getName()
+                            ).br();
+                }
             }
-
             // builder = builder.end();
         }
 

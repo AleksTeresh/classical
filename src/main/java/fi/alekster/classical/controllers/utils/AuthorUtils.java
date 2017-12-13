@@ -51,7 +51,7 @@ public class AuthorUtils {
         for (int i = 0; i < nameTokens.length; i++) {
             String word = nameTokens[i];
 
-            if (word != null && word != "" && Character.isUpperCase(word.codePointAt(0))) {
+            if (word != null && !Objects.equals(word, "") && Character.isUpperCase(word.codePointAt(0))) {
                 capitalWordsCount = capitalWordsCount + 1;
             } else {
                 nonCapitalWordsCount = nonCapitalWordsCount + 1;
@@ -66,7 +66,7 @@ public class AuthorUtils {
 
         // if the whole authon name is just an html tag without text within, the name is invalid
         String plainTextName = commonUtils.htmlToText(name);
-        if (plainTextName == null && plainTextName == "") {
+        if (plainTextName == null || Objects.equals(plainTextName, "")) {
             return false;
         }
 

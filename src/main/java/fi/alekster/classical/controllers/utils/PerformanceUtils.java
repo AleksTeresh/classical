@@ -37,7 +37,7 @@ public class PerformanceUtils {
     public Performance requestToPerformance (PerformanceRequest performanceRequest, List<Author> authors) {
         List<String> authorNames = authors
                 .stream()
-                .map(p -> p.getName())
+                .map(Author::getName)
                 .collect(Collectors.toList());
         ExtractedResult result = FuzzySearch.extractOne(performanceRequest.getAuthor(), authorNames);
         Author relatedAuthor;
@@ -46,7 +46,7 @@ public class PerformanceUtils {
                     .filter(p -> Objects.equals(p.getName(), "No author"))
                     .findFirst().get();
         } else {
-            relatedAuthor= authors.stream()
+            relatedAuthor = authors.stream()
                 .filter(p -> Objects.equals(p.getName(), result.getString()))
                 .findFirst().get();
         }

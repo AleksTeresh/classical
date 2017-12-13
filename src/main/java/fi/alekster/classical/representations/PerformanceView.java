@@ -65,6 +65,8 @@ public class PerformanceView {
         this.liked = liked;
     }
 
+
+
     public static PerformanceView fromEntity(
             Performance performance,
             AuthorView author,
@@ -91,5 +93,45 @@ public class PerformanceView {
                 performance.getWikipediaLink(),
                 liked
         );
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public AuthorView getAuthor() {
+        return author;
+    }
+
+    public List<GenreView> getGenres() {
+        return genres;
+    }
+
+    public String getConductor() {
+        return conductor;
+    }
+
+    public String getPlayers() {
+        return players;
+    }
+
+    public String getYoutubeId() {
+        return youtubeId;
+    }
+
+    public String getWikipediaLink() {
+        return wikipediaLink;
+    }
+
+    public boolean isLiked() {
+        return liked;
     }
 }
