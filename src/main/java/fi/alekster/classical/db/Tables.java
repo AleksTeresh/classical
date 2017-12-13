@@ -10,6 +10,7 @@ import fi.alekster.classical.db.tables.Databasechangelog;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
+import fi.alekster.classical.db.tables.Like;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.PerformanceGenre;
 import fi.alekster.classical.db.tables.User;
@@ -64,6 +65,11 @@ public class Tables {
      * The table <code>public.gig</code>.
      */
     public static final Gig GIG = fi.alekster.classical.db.tables.Gig.GIG;
+
+    /**
+     * The table <code>public.like</code>.
+     */
+    public static final Like LIKE = fi.alekster.classical.db.tables.Like.LIKE;
 
     /**
      * The table <code>public.performance</code>.

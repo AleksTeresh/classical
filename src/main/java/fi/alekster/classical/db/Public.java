@@ -10,6 +10,7 @@ import fi.alekster.classical.db.tables.Databasechangelog;
 import fi.alekster.classical.db.tables.Databasechangeloglock;
 import fi.alekster.classical.db.tables.Genre;
 import fi.alekster.classical.db.tables.Gig;
+import fi.alekster.classical.db.tables.Like;
 import fi.alekster.classical.db.tables.Performance;
 import fi.alekster.classical.db.tables.PerformanceGenre;
 import fi.alekster.classical.db.tables.User;
@@ -44,7 +45,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -733521729;
+    private static final long serialVersionUID = 505640061;
 
     /**
      * The reference instance of <code>public</code>
@@ -80,6 +81,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.gig</code>.
      */
     public final Gig GIG = fi.alekster.classical.db.tables.Gig.GIG;
+
+    /**
+     * The table <code>public.like</code>.
+     */
+    public final Like LIKE = fi.alekster.classical.db.tables.Like.LIKE;
 
     /**
      * The table <code>public.performance</code>.
@@ -168,6 +174,7 @@ public class Public extends SchemaImpl {
             Databasechangeloglock.DATABASECHANGELOGLOCK,
             Genre.GENRE,
             Gig.GIG,
+            Like.LIKE,
             Performance.PERFORMANCE,
             PerformanceGenre.PERFORMANCE_GENRE,
             User.USER,

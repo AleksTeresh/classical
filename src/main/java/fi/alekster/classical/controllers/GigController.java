@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,12 +34,14 @@ public class GigController {
     private final ExAuthorDao authorDao;
     private final ExGenreDao genreDao;
     private final ExVenueDao venueDao;
+    private final ExLikeDao likeDao;
 
     private final CommonUtils commonUtils;
     private final PerformanceUtils performanceUtils;
     private final AuthorUtils authorUtils;
     private final GenreUtils genreUtils;
     private final DurationUtils durationUtils;
+    private final UserUtils userUtils;
 
     @Autowired
     public GigController(
@@ -47,11 +50,13 @@ public class GigController {
             ExAuthorDao authorDao,
             ExGenreDao genreDao,
             ExVenueDao venueDao,
+            ExLikeDao likeDao,
             CommonUtils commonUtils,
             PerformanceUtils performanceUtils,
             AuthorUtils authorUtils,
             GenreUtils genreUtils,
-            DurationUtils durationUtils
+            DurationUtils durationUtils,
+            UserUtils userUtils
     ) {
         System.out.println("Constructor has been called");
         this.gigDao = gigDao;
@@ -59,12 +64,14 @@ public class GigController {
         this.authorDao = authorDao;
         this.genreDao = genreDao;
         this.venueDao = venueDao;
+        this.likeDao = likeDao;
 
         this.commonUtils = commonUtils;
         this.performanceUtils = performanceUtils;
         this.authorUtils = authorUtils;
         this.genreUtils = genreUtils;
         this.durationUtils = durationUtils;
+        this.userUtils = userUtils;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -101,7 +108,12 @@ public class GigController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public GigView getGig(@PathVariable("id") Long id) {
+    public GigView getGig(HttpServletRequest httpServletRequest, @PathVariable("id") Long id) {
+        String authHeader = httpServletRequest.getHeader("Authorization");
+        String userEmail = (authHeader != null && authHeader != "")
+                ? userUtils.getAuthenticatedCredential(httpServletRequest).getEmail()
+                : "";
+
         Gig fetchedGig = gigDao.fetchOneById(id);
 
         return GigView.fromEntity(
@@ -114,7 +126,8 @@ public class GigController {
                             genreDao.fetchByPerformanceId(p.getId())
                                     .stream()
                                     .map(GenreView::fromEntity)
-                                    .collect(Collectors.toList())
+                                    .collect(Collectors.toList()),
+                            userEmail != "" && !likeDao.fetchByEmailAndPerformanceId(userEmail, p.getId()).isEmpty()
                     ))
                     .collect(Collectors.toList()),
                 VenueView.fromEntity(venueDao.fetchOneById(fetchedGig.getVenueId()))
@@ -122,7 +135,7 @@ public class GigController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public GigView createGig(@RequestBody GigRequest input) {
+    public GigView createGig(HttpServletRequest httpServletRequest, @RequestBody GigRequest input) {
         Timestamp timestamp = commonUtils.stringToTimestamp(input.getTimestamp());
 
         // check if the gig already exists, and if so, return the existing gig
@@ -132,7 +145,7 @@ public class GigController {
                     .filter(p -> p.getName().contains(input.getName()) && p.getVenueId() == input.getVenue())
                     .findFirst();
             if (existingGig.isPresent()) {
-                return getGig(existingGig.get().getId());
+                return getGig(httpServletRequest, existingGig.get().getId());
             }
         }
 
@@ -166,7 +179,7 @@ public class GigController {
 
         insertNewPerformances(performances, authors, newGig);
 
-        return getGig(newGig.getId());
+        return getGig(httpServletRequest, newGig.getId());
     }
 
     private void insertNewPerformances (List<Performance> performances, List<Author> authors, Gig newlyCreatedGig) {

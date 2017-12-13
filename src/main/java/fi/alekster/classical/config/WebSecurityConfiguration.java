@@ -71,7 +71,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/genre/**",
                         "/gig/**",
                         "/venue/**",
-                        "/user/**",
                         "/*.html",
                         "/favicon.ico",
                         "/**/*.html",

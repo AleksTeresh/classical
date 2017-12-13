@@ -36,6 +36,9 @@ public class PerformanceView {
     @JsonProperty
     private String wikipediaLink;
 
+    @JsonProperty
+    private boolean liked;
+
     public PerformanceView () {}
 
     public PerformanceView(
@@ -47,7 +50,8 @@ public class PerformanceView {
             String conductor,
             String players,
             String youtubeId,
-            String wikipediaLink
+            String wikipediaLink,
+            boolean liked
     ) {
         this.id = id;
         this.name = name;
@@ -58,9 +62,23 @@ public class PerformanceView {
         this.players = players;
         this.youtubeId = youtubeId;
         this.wikipediaLink = wikipediaLink;
+        this.liked = liked;
     }
 
-    public static PerformanceView fromEntity(Performance performance, AuthorView author, List<GenreView> genres) {
+    public static PerformanceView fromEntity(
+            Performance performance,
+            AuthorView author,
+            List<GenreView> genres
+    ) {
+        return fromEntity(performance, author, genres, false);
+    }
+
+    public static PerformanceView fromEntity(
+            Performance performance,
+            AuthorView author,
+            List<GenreView> genres,
+            boolean liked
+    ) {
         return new PerformanceView(
                 performance.getId(),
                 performance.getName(),
@@ -70,7 +88,8 @@ public class PerformanceView {
                 performance.getConductor(),
                 performance.getPlayers(),
                 performance.getYoutubeId(),
-                performance.getWikipediaLink()
+                performance.getWikipediaLink(),
+                liked
         );
     }
 }

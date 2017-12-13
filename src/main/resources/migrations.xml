@@ -263,4 +263,18 @@
                                  referencedColumnNames="id" />
 
     </changeSet>
+
+    <changeSet id="2" author="Aleksandr Tereshchenko">
+        <createTable tableName="like">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="performance_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
