@@ -136,6 +136,11 @@
             <artifactId>mailgun</artifactId>
             <version>1.5.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.2</version>
+        </dependency>
     </dependencies>
 
     <build>

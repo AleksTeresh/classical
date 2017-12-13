@@ -1,5 +1,6 @@
 package fi.alekster.classical.controllers;
 
+import fi.alekster.classical.controllers.utils.AuthorUtils;
 import fi.alekster.classical.dao.ExAuthorDao;
 import fi.alekster.classical.representations.AuthorView;
 import fi.alekster.classical.representations.responses.AuthorResponse;
@@ -16,12 +17,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/author")
 public class AuthorController {
     private final ExAuthorDao authorDao;
+    private final AuthorUtils authorUtils;
 
     @Autowired
     public AuthorController(
-            ExAuthorDao authorDao
+            ExAuthorDao authorDao,
+            AuthorUtils authorUtils
     ) {
         this.authorDao = authorDao;
+        this.authorUtils = authorUtils;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -32,7 +36,10 @@ public class AuthorController {
     ) {
         long count = authorDao.count(keyPhrase);
         List<AuthorView> authors = authorDao.fetch(keyPhrase, limit, offset).stream()
-                .map(AuthorView::fromEntity).collect(Collectors.toList());
+                .filter(authorUtils::isAuthorValid)
+                .map(authorUtils::removeTranscriptorFromName)
+                .map(AuthorView::fromEntity)
+                .collect(Collectors.toList());
 
         return new AuthorResponse(authors, count);
     }

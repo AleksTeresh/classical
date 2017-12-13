@@ -3,6 +3,7 @@ package fi.alekster.classical.controllers.utils;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -16,7 +17,7 @@ public class CommonUtils {
 
     public Timestamp stringToTimestamp(String stringTimestamp) {
         try {
-            System.out.println(stringTimestamp);
+            // System.out.println(stringTimestamp);
             DateTime dateTime = ISODateTimeFormat.dateTimeParser().parseDateTime(stringTimestamp);
             return Timestamp.valueOf(dateTime.toString("yyyy-MM-dd HH:mm:ss"));
         } catch (Exception ex) {
@@ -42,5 +43,9 @@ public class CommonUtils {
         }
 
         return finalResult;
+    }
+
+    public String htmlToText(String html) {
+        return Jsoup.parse(html).text();
     }
 }

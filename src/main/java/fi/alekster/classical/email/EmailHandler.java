@@ -122,8 +122,11 @@ public class EmailHandler {
             builder = builder.h2(gigs.get(i).getName())
                     .p("Takes place on " + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
                             .format(gigs.get(i).getTimestamp()))
-                    .p("The venue is " + venueName)
-                    .h3("The program is");
+                    .p("The venue is " + venueName);
+
+            if (performances != null && !performances.isEmpty()) {
+                builder = builder.h3("The program is");
+            }
 
             for (int j = 0; j < performances.size(); j++) {
                 builder = builder
