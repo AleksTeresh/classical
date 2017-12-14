@@ -5,7 +5,9 @@ import fi.alekster.classical.wikipedia.WikiFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Created by aleksandr on 9.12.2017.
@@ -79,5 +81,20 @@ public class AuthorUtils {
         }
 
         return author;
+    }
+
+    public List<Author> getSortedPreferredAuthors(
+            List<Long> likedAuthorIds,
+            List<Author> authors
+    ) {
+        return authors.stream()
+                .filter(p -> likedAuthorIds.contains(p.getId()))
+                .sorted((a, b) -> {
+                    Long likesToA = likedAuthorIds.stream().filter(s -> Objects.equals(s, a.getId())).count();
+                    Long likesToB = likedAuthorIds.stream().filter(s -> Objects.equals(s, b.getId())).count();
+
+                    return -likesToA.compareTo(likesToB);
+                })
+        .collect(Collectors.toList());
     }
 }

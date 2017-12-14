@@ -3,10 +3,7 @@ package fi.alekster.classical.controllers;
 import fi.alekster.classical.controllers.model.GigDetailed;
 import fi.alekster.classical.controllers.utils.*;
 import fi.alekster.classical.dao.*;
-import fi.alekster.classical.db.tables.pojos.Author;
-import fi.alekster.classical.db.tables.pojos.Genre;
-import fi.alekster.classical.db.tables.pojos.Gig;
-import fi.alekster.classical.db.tables.pojos.Performance;
+import fi.alekster.classical.db.tables.pojos.*;
 import fi.alekster.classical.representations.*;
 import fi.alekster.classical.representations.requests.DetailedGigResponse;
 import fi.alekster.classical.representations.requests.GigRequest;
@@ -118,7 +115,7 @@ public class GigController {
         DateTime yearAhead = new DateTime(today).plusYears(1);
         List<Gig> suggestions = gigDao.fetch(
                 "",
-                30,
+                40,
                 0,
                 performances.stream()
                     .filter(p -> !Objects.equals(p.getAuthor().getName(), "No author") && p.getAuthor().getId() != 1)
@@ -140,7 +137,16 @@ public class GigController {
                 )
                 .collect(Collectors.toList());
 
-        detailedSuggestions = gigUtils.sortSuggestions(new GigDetailed(fetchedGig, performances), detailedSuggestions);
+        List<Like> likes = Objects.equals(userEmail, "")
+                ? new ArrayList<>()
+                : likeDao.fetchByEmail(userEmail);
+
+        List<Long> likedAuthorIds = getLikedAuthorIds(likes);
+        detailedSuggestions = gigUtils.sortSuggestions(
+                new GigDetailed(fetchedGig, performances),
+                detailedSuggestions,
+                likedAuthorIds
+        );
 
         return new DetailedGigResponse(
                 gigView,
@@ -198,6 +204,12 @@ public class GigController {
         insertNewPerformances(performances, authors, newGig);
 
         return getGigView(newGig.getId());
+    }
+
+    private List<Long> getLikedAuthorIds (List<Like> likes) {
+        return likes.stream()
+                .map(p -> performanceDao.fetchOneById(p.getPerformanceId()).getAuthorId())
+                .collect(Collectors.toList());
     }
 
     private void insertNewPerformances (List<Performance> performances, List<Author> authors, Gig newlyCreatedGig) {

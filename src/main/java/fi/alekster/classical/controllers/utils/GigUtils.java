@@ -17,6 +17,13 @@ import java.util.stream.Collectors;
  */
 @Component
 public class GigUtils {
+
+    private final AuthorUtils authorUtils;
+
+    public GigUtils (AuthorUtils authorUtils) {
+        this.authorUtils = authorUtils;
+    }
+
     public List<Gig> filterSuggestions (Gig detailedGig, List<Gig> gigs) {
         // make sure the main gig itself is not among them
         return gigs.stream()
@@ -28,10 +35,27 @@ public class GigUtils {
      * sort the gigs consifering 1) the venue 2) genre of performances 3) datatime
      * the onces that are more similar to the currently views gig, go first
      **/
-    public List<GigDetailed> sortSuggestions (GigDetailed detailedGig, List<GigDetailed> gigs) {
+    public List<GigDetailed> sortSuggestions (
+            GigDetailed detailedGig,
+            List<GigDetailed> gigs,
+            List<Long> likedAuthorIds
+    ) {
         gigs.sort((a, b) -> {
             Gig aGig = a.getGig();
             Gig bGig = b.getGig();
+
+            // if there are likes related to an author that is being featured in the gig, give preference to the gig
+            // if both gigs have such "liked" author, give preference to the one that has a larger number of "author-likes"
+            if (!likedAuthorIds.isEmpty()) {
+                long aGigCount = getLikenessScore(a.getPerformances(), likedAuthorIds);
+                long bGigCount = getLikenessScore(b.getPerformances(), likedAuthorIds);
+
+                if (aGigCount != bGigCount) {
+                    return aGigCount > bGigCount
+                            ? -1
+                            : 1;
+                }
+            }
 
             // if the venues are the same or they are both not what the reference venue is,
             // procede to comparison by genre
@@ -102,7 +126,7 @@ public class GigUtils {
                 return 1;
             }
 
-            // the gig wi the same venue as the reference goes first
+            // the gig with the same venue as the reference goes first
             if (
                     Objects.equals(aGig.getVenueId(), detailedGig.getGig().getVenueId())  &&
                             !Objects.equals(bGig.getVenueId(), detailedGig.getGig().getVenueId())
@@ -114,6 +138,18 @@ public class GigUtils {
         });
 
         return gigs;
+    }
+
+    private long getLikenessScore (List<PerformanceView> performances, List<Long> likedAuthorIds) {
+        return performances
+                .stream()
+                .reduce(
+                        0L,
+                        (acc, perf) -> acc + likedAuthorIds.stream()
+                                .filter(auId -> Objects.equals(auId, perf.getAuthor().getId()))
+                                .count(),
+                        (perf1, perf2) -> perf1 + perf2
+                );
     }
 
     private int getNumberOfMatchingGenres (List<PerformanceView> performances, List<PerformanceView> referencePerformances) {
