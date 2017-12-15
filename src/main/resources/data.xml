@@ -168,39 +168,10 @@
 
         <insert
                 schemaName="public"
-                tableName="author">
-            <column name="id" value="2" />
-            <column name="name" value="Sergei Rachmaninoff" />
-            <column name="wikipedia_link" value="https://en.wikipedia.org/wiki/Sergei_Rachmaninoff" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="credential">
-            <column name="email" value="terap98@icloud.com" />
-            <column name="password" value="$2a$09$qQ5Oju2e.7HJva3EgQws7.SEciXjAEpPbbyPCrwf1Ks26QpnVmr6O" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="user">
-            <column name="email" value="terap98@icloud.com" />
-            <column name="name" value="Aleksandr" />
-        </insert>
-
-        <insert
-                schemaName="public"
-                tableName="credential">
-            <column name="email" value="admin@classical.dynu.net" />
-            <column name="password" value="$2a$09$FRCO1mgMG1w/0N9aIqamgO9FughNzZldd9aflnjjLplB7SfsxaVXS" />
-        </insert>
-
-        <insert
-                schemaName="public"
                 tableName="venue">
             <column name="id" value="1" />
             <column name="name" value="Musiikkitalo" />
-            <column name="description" value="The only place with decent kind of music in the whole Finland" />
+            <column name="description" value="A concert hall and a music center in Helsinki" />
         </insert>
         <insert
                 schemaName="public"

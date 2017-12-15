@@ -14,3 +14,6 @@ classical-front:
   image: alekster/classical-front
   links:
     - classical:back-end
+  ports:
+    - 80:80
+    - 443:443
